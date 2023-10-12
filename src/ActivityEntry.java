@@ -1,5 +1,4 @@
 public class ActivityEntry {
-    public static enum ACTIVITYTYPE {RUNNING, SWIMMING, CYCLING};
     public static enum ACTIVITYTYPE {RUNNING, SWIMMING, CYCLING,INVALID};
 
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS};
@@ -10,7 +9,6 @@ public class ActivityEntry {
     private int heartRate;
     private int duration;
 
-    public ActivityEntry(double intensityValue, String date, double distance, int heartRate, int duration) {
     public ActivityEntry(ACTIVITYTYPE activitytype, String date, double distance, int heartRate, int duration) {
         this.activitytype =  activitytype;
         this.date = date;
