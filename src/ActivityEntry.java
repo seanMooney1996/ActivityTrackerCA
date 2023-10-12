@@ -1,15 +1,16 @@
 public class ActivityEntry {
-    public static enum ACTIVITYTYPE {RUNNING, SWIMMING, CYCLING};
+    public static enum ACTIVITYTYPE {RUNNING, SWIMMING, CYCLING,INVALID};
 
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS};
+    private ACTIVITYTYPE activitytype;
     private double intensityValue;
     private String date;
     private double distance;
     private int heartRate;
     private int duration;
 
-    public ActivityEntry(double intensityValue, String date, double distance, int heartRate, int duration) {
-        this.intensityValue = intensityValue;
+    public ActivityEntry(ACTIVITYTYPE activitytype, String date, double distance, int heartRate, int duration) {
+        this.activitytype =  activitytype;
         this.date = date;
         this.distance = distance;
         this.heartRate = heartRate;
@@ -18,10 +19,6 @@ public class ActivityEntry {
 
     public double getIntensityValue() {
         return intensityValue;
-    }
-
-    public void setIntensityValue(double intensityValue) {
-        this.intensityValue = intensityValue;
     }
 
     public String getDate() {
@@ -59,7 +56,7 @@ public class ActivityEntry {
     @Override
     public String toString() {
         return "ActivityEntry{" +
-                "intensityValue=" + intensityValue +
+                "ActivityType=" + activitytype.name() +
                 ", date='" + date + '\'' +
                 ", distance=" + distance +
                 ", heartRate=" + heartRate +
