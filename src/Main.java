@@ -1,17 +1,53 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args)throws IOException {
+        ArrayList<ActivityEntry> records = new ArrayList<>();
+        String fileName = "sampleCSV.csv";
+        loadCSV(records,fileName);
+    }
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
-
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+    public static void loadCSV(ArrayList<ActivityEntry> records, String fileName) throws IOException {
+        File f = new File(fileName);
+        Scanner input = new Scanner(f);
+        String line;
+        while (input.hasNextLine()) {
+            line = input.nextLine();
+            if (line != "") {
+                ActivityEntry entry = parseLine(line);
+                records.add(entry);
+                System.out.println(entry);
+            }
         }
     }
+
+    private static ActivityEntry parseLine(String line) {
+        // To set default value to invalid in-case of entry not including (swimming,running,cycling)
+        ActivityEntry.ACTIVITYTYPE activitytype = ActivityEntry.ACTIVITYTYPE.INVALID;
+        String date;
+        int duration;
+        double distance;
+        int heartRate;
+        StringTokenizer st = new StringTokenizer(line, ",");
+        String activityString = st.nextToken().trim().toUpperCase();
+
+        // loops through possible enums and checks if entry includes possible values
+        for (ActivityEntry.ACTIVITYTYPE activity : ActivityEntry.ACTIVITYTYPE.values()){
+            if(activityString.equalsIgnoreCase(activity.name())){
+                activitytype = ActivityEntry.ACTIVITYTYPE.valueOf(activityString);
+            }
+        }
+
+        date = st.nextToken().trim();
+        duration = Integer.parseInt(st.nextToken().trim());
+        distance = Double.parseDouble(st.nextToken().trim());
+        heartRate = Integer.parseInt(st.nextToken().trim());
+        return new ActivityEntry(activitytype,date,distance,heartRate,duration);
+    }
+
 }
