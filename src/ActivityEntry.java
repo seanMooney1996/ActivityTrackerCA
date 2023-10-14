@@ -2,19 +2,24 @@ public class ActivityEntry {
     public static enum ACTIVITYTYPE {RUNNING, SWIMMING, CYCLING,INVALID};
 
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS};
-    private ACTIVITYTYPE activitytype;
+    public ACTIVITYTYPE activitytype;
     private double intensityValue;
     private String date;
     private double distance;
     private int heartRate;
     private int duration;
 
+
+
     public ActivityEntry(ACTIVITYTYPE activitytype, String date, double distance, int heartRate, int duration) {
-        this.activitytype =  activitytype;
+        this.activitytype = activitytype;
         this.date = date;
         this.distance = distance;
         this.heartRate = heartRate;
         this.duration = duration;
+    }
+    public ACTIVITYTYPE getActivitytype() {
+        return activitytype;
     }
 
     public double getIntensityValue() {
