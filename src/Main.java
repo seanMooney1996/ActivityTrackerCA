@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Main {
@@ -13,6 +11,7 @@ public class Main {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
         loadCSV(records,fileName);
+
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         int choice = 0;
@@ -63,10 +62,12 @@ public class Main {
             if (line != "") {
                 ActivityEntry entry = parseLine(line);
                 records.add(entry);
-                //System.out.println(entry);
+                System.out.println(entry);
             }
         }
     }
+
+
     private static ActivityEntry parseLine(String line) {
         // To set default value to invalid in-case of entry not including (swimming,running,cycling)
         String date;
@@ -83,6 +84,7 @@ public class Main {
         heartRate = Integer.parseInt(st.nextToken().trim());
         return new ActivityEntry(date,distance,heartRate,duration);
     }
+
     public static void addActivityEntry(ArrayList<ActivityEntry> e) {
         String date = "";
         double distance = 0.0;
@@ -390,5 +392,4 @@ public class Main {
             }
         }while(!exit);
     }
-
 }
