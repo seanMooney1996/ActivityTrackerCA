@@ -51,7 +51,7 @@ public class ActivityEntry {
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public void setDuration(int duration) {
