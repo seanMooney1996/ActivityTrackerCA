@@ -7,18 +7,21 @@ public class ActivityEntry {
     private int heartRate;
     private int duration;
 
+
     public ActivityEntry(String date, double distance, int heartRate, int duration) {
         this.date = date;
         this.distance = distance;
         this.heartRate = heartRate;
         this.duration = duration;
     }
+
     public ActivityEntry() {
         this.date = "default";
         this.distance = 0.0;
         this.heartRate = 0;
         this.duration = 0;
     }
+
 
     public double getIntensityValue() {
         return intensityValue;
@@ -49,7 +52,7 @@ public class ActivityEntry {
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public void setDuration(int duration) {
