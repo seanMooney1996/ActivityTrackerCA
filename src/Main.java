@@ -38,7 +38,6 @@ public class Main {
                 case 2:
                     addActivityEntry(records);
                 case 3:
-
                     break;
                 case 4:
                     System.out.println("this will eventually do something            |");
@@ -64,7 +63,6 @@ public class Main {
             if (line != "") {
                 ActivityEntry entry = parseLine(line);
                 records.add(entry);
-                System.out.println(entry);
             }
         }
     }
@@ -121,23 +119,6 @@ public class Main {
         }
         int activityTypeChoice = kb.nextInt();
         kb.nextLine(); // consume line
-
-        // initialize activityType with 'invalid'
-
-//        // sets activityType to one of the 3 enums from ACTIVITYTYPE
-//        switch (activityTypeChoice) {
-//            case 1:
-//                activityType = ActivityEntry.ACTIVITYTYPE.RUNNING;
-//                break;
-//            case 2:
-//                activityType = ActivityEntry.ACTIVITYTYPE.SWIMMING;
-//                break;
-//            case 3:
-//                activityType = ActivityEntry.ACTIVITYTYPE.CYCLING;
-//                break;
-//            default:
-//                System.out.println("Please select from 1-3 from the menu.");
-//        }
 
         // Error handling for DATE input, ensures input follows the same dd/mm/yyyy format as csv file
         do {
@@ -210,6 +191,7 @@ public class Main {
             System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
         }
         System.out.println("+===========================================================================+");
+
     }
     public static void displaySessionsMenu() {
         System.out.println("+ --------  Sessions  --------- +");
