@@ -69,7 +69,6 @@ public class Main {
     }
     private static ActivityEntry parseLine(String line) {
         // To set default value to invalid in-case of entry not including (swimming,running,cycling)
-        ActivityEntry.ACTIVITYTYPE activitytype = ActivityEntry.ACTIVITYTYPE.INVALID;
         String date;
         int duration;
         double distance;
@@ -77,18 +76,12 @@ public class Main {
         StringTokenizer st = new StringTokenizer(line, ",");
         String activityString = st.nextToken().trim().toUpperCase();
 
-        // loops through possible enums and checks if entry includes possible values
-        for (ActivityEntry.ACTIVITYTYPE activity : ActivityEntry.ACTIVITYTYPE.values()){
-            if(activityString.equalsIgnoreCase(activity.name())){
-                activitytype = ActivityEntry.ACTIVITYTYPE.valueOf(activityString);
-            }
-        }
 
         date = st.nextToken().trim();
         duration = Integer.parseInt(st.nextToken().trim());
         distance = Double.parseDouble(st.nextToken().trim());
         heartRate = Integer.parseInt(st.nextToken().trim());
-        return new ActivityEntry(activitytype,date,distance,heartRate,duration);
+        return new ActivityEntry(date,distance,heartRate,duration);
     }
     public static void addActivityEntry(ArrayList<ActivityEntry> e) {
         String date = "";
@@ -114,21 +107,21 @@ public class Main {
         kb.nextLine(); // consume line
 
         // initialize activityType with 'invalid'
-        ActivityEntry.ACTIVITYTYPE activityType = ActivityEntry.ACTIVITYTYPE.INVALID;
-        // sets activityType to one of the 3 enums from ACTIVITYTYPE
-        switch (activityTypeChoice) {
-            case 1:
-                activityType = ActivityEntry.ACTIVITYTYPE.RUNNING;
-                break;
-            case 2:
-                activityType = ActivityEntry.ACTIVITYTYPE.SWIMMING;
-                break;
-            case 3:
-                activityType = ActivityEntry.ACTIVITYTYPE.CYCLING;
-                break;
-            default:
-                System.out.println("Please select from 1-5 from the menu.");
-        }
+
+//        // sets activityType to one of the 3 enums from ACTIVITYTYPE
+//        switch (activityTypeChoice) {
+//            case 1:
+//                activityType = ActivityEntry.ACTIVITYTYPE.RUNNING;
+//                break;
+//            case 2:
+//                activityType = ActivityEntry.ACTIVITYTYPE.SWIMMING;
+//                break;
+//            case 3:
+//                activityType = ActivityEntry.ACTIVITYTYPE.CYCLING;
+//                break;
+//            default:
+//                System.out.println("Please select from 1-3 from the menu.");
+//        }
 
         // Error handling for DATE input, ensures input follows the same dd/mm/yyyy format as csv file
         do {
@@ -170,17 +163,13 @@ public class Main {
         duration = kb.nextInt();
 
         // add new entry
-        e.add(new ActivityEntry(activityType,date,distance,heartRate,duration));
+        e.add(new ActivityEntry(date,distance,heartRate,duration));
         displaySessions(e);
     }
     public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
         ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
 
-        for(ActivityEntry entry: e) {
-            if(entry.getActivitytype() == ActivityEntry.ACTIVITYTYPE.valueOf(requestedType)) {
-                filterByActivities.add(entry);
-            }
-        }
+
         return filterByActivities;
     }
 
@@ -202,7 +191,7 @@ public class Main {
         System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate\t\t|");
 
         for(ActivityEntry e: entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s |\n", e.getActivitytype(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s |\n",e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
         }
         System.out.println("+===========================================================================+");
     }
