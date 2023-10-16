@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -20,7 +21,7 @@ public class Main {
             displayMenu();
             // check if input is not a number
             while(!kb.hasNextInt()) {
-                System.out.println("Invalid input, enter a corresponding number listed from the menu (1-5).");
+                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
                 kb.next(); // Consume invalid input
             }
             choice = kb.nextInt();
@@ -31,19 +32,18 @@ public class Main {
                     exit = true;
                     break;
                 case 1:
-                        addActivityEntry(records);
+                    SessionsInterface(records);
                     break;
                 case 2:
-                    displaySessions(records);
-                    break;
+                    addActivityEntry(records);
                 case 3:
-                    System.out.println("this will eventually  Display all running    |");
+
                     break;
                 case 4:
-                    System.out.println("this will eventually  Display all swimming   |");
+                    System.out.println("this will eventually do something            |");
                     break;
                 case 5:
-                    System.out.println("this will eventually  Display all cycling    |");
+                    System.out.println("this will eventually do something            |");
                     break;
                 default:
                     System.out.println("Please select from 1-5 from the menu.");
@@ -52,6 +52,8 @@ public class Main {
 
         }while(!exit);
     }
+
+
     public static void loadCSV(ArrayList<ActivityEntry> records, String fileName) throws IOException {
         File f = new File(fileName);
         Scanner input = new Scanner(f);
@@ -67,7 +69,6 @@ public class Main {
     }
     private static ActivityEntry parseLine(String line) {
         // To set default value to invalid in-case of entry not including (swimming,running,cycling)
-        ActivityEntry.ACTIVITYTYPE activitytype = ActivityEntry.ACTIVITYTYPE.INVALID;
         String date;
         int duration;
         double distance;
@@ -75,47 +76,14 @@ public class Main {
         StringTokenizer st = new StringTokenizer(line, ",");
         String activityString = st.nextToken().trim().toUpperCase();
 
-        // loops through possible enums and checks if entry includes possible values
-        for (ActivityEntry.ACTIVITYTYPE activity : ActivityEntry.ACTIVITYTYPE.values()){
-            if(activityString.equalsIgnoreCase(activity.name())){
-                activitytype = ActivityEntry.ACTIVITYTYPE.valueOf(activityString);
-            }
-        }
 
         date = st.nextToken().trim();
         duration = Integer.parseInt(st.nextToken().trim());
         distance = Double.parseDouble(st.nextToken().trim());
         heartRate = Integer.parseInt(st.nextToken().trim());
-        return new ActivityEntry(activitytype,date,distance,heartRate,duration);
+        return new ActivityEntry(date,distance,heartRate,duration);
     }
-
-    public static void displayMenu()
-    {
-        System.out.println("+ ----------------------------- +");
-        System.out.println("|                               |");
-        System.out.println("|    1. Add new activity        |");
-        System.out.println("|    2. Display all sessions    |");
-        System.out.println("|    3. Display all running     |");
-        System.out.println("|    4. Display all swimming    |");
-        System.out.println("|    5. Display all cycling     |");
-        System.out.println("|    0. Exit                    |");
-//        System.out.println("|                               |");      //space for additonal options
-//        System.out.println("|                               |");
-//        System.out.println("|                               |");
-        System.out.println("|                               |");
-        System.out.println("+ ----------------------------- +");
-    }
-    public static void displaySessions(ArrayList<ActivityEntry> entries)
-    {
-        System.out.println("========================\t\tSessions\t\t========================");
-        System.out.printf("%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Average Heart Rate");
-
-        for(ActivityEntry e: entries) {
-            System.out.printf("%-15s %-12s %-10s %-10s %-20s\n", e.getActivitytype(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
-        }
-    }
-    public static void addActivityEntry(ArrayList<ActivityEntry> e)
-    {
+    public static void addActivityEntry(ArrayList<ActivityEntry> e) {
         String date = "";
         double distance = 0.0;
         int heartRate = 0;
@@ -139,21 +107,21 @@ public class Main {
         kb.nextLine(); // consume line
 
         // initialize activityType with 'invalid'
-        ActivityEntry.ACTIVITYTYPE activityType = ActivityEntry.ACTIVITYTYPE.INVALID;
-        // sets activityType to one of the 3 enums from ACTIVITYTYPE
-        switch (activityTypeChoice) {
-            case 1:
-                activityType = ActivityEntry.ACTIVITYTYPE.RUNNING;
-                break;
-            case 2:
-                activityType = ActivityEntry.ACTIVITYTYPE.SWIMMING;
-                break;
-            case 3:
-                activityType = ActivityEntry.ACTIVITYTYPE.CYCLING;
-                break;
-            default:
-                System.out.println("Please select from 1-5 from the menu.");
-        }
+
+//        // sets activityType to one of the 3 enums from ACTIVITYTYPE
+//        switch (activityTypeChoice) {
+//            case 1:
+//                activityType = ActivityEntry.ACTIVITYTYPE.RUNNING;
+//                break;
+//            case 2:
+//                activityType = ActivityEntry.ACTIVITYTYPE.SWIMMING;
+//                break;
+//            case 3:
+//                activityType = ActivityEntry.ACTIVITYTYPE.CYCLING;
+//                break;
+//            default:
+//                System.out.println("Please select from 1-3 from the menu.");
+//        }
 
         // Error handling for DATE input, ensures input follows the same dd/mm/yyyy format as csv file
         do {
@@ -194,8 +162,233 @@ public class Main {
         }
         duration = kb.nextInt();
 
-       // add new entry
-        e.add(new ActivityEntry(activityType,date,distance,heartRate,duration));
+        // add new entry
+        e.add(new ActivityEntry(date,distance,heartRate,duration));
         displaySessions(e);
     }
+    public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
+        ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
+
+
+        return filterByActivities;
+    }
+
+
+    public static void displayMenu() {
+        System.out.println("+ ------ Activity Tracker ----- +");
+        System.out.println("|                               |");
+        System.out.println("|    1. Sessions                |");
+        System.out.println("|    2. Add new activity        |");
+        System.out.println("|    3.                         |");
+        System.out.println("|    4.                         |");
+        System.out.println("|    5.                         |");
+        System.out.println("|    0. Exit                    |");
+        System.out.println("|                               |");
+        System.out.println("+ ----------------------------- +");
+    }
+    public static void displaySessions(ArrayList<ActivityEntry> entries) {
+        System.out.println("+==========================\t\t Sessions\t\t===========================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate\t\t|");
+
+        for(ActivityEntry e: entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s |\n",e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
+        }
+        System.out.println("+===========================================================================+");
+    }
+    public static void displaySessionsMenu() {
+        System.out.println("+ --------  Sessions  --------- +");
+        System.out.println("|                               |");
+        System.out.println("|    1. Display all             |");
+        System.out.println("|    2. Running                 |");
+        System.out.println("|    3. Swimming                |");
+        System.out.println("|    4. Cycling                 |");
+        System.out.println("|    0. Return                  |");
+        System.out.println("|                               |");
+        System.out.println("+ ----------------------------- +");
+    }
+    public static void SessionsInterface(ArrayList<ActivityEntry> e) {
+        Scanner kb = new Scanner(System.in);
+        boolean exit = false;
+        do{
+            displaySessionsMenu();
+            // check if input is not a number
+            while(!kb.hasNextInt()) {
+                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-4).");
+                kb.next(); // Consume invalid input
+            }
+            int choice = kb.nextInt();
+            kb.nextLine();
+
+            switch(choice) {
+                case 1:
+                    displaySessions(e);
+                    break;
+                case 2:
+                    RunningInterface(e);
+                    break;
+                case 3:
+                    SwimmingInterface(e);
+                    break;
+                case 4:
+                    CyclingInterface(e);
+                    break;
+                case 0:
+                    exit = true;
+                default:
+                    System.out.println("Please select from 1-5 from the menu.");
+            }
+        }while(!exit);
+
+    }
+    public static void displayRunningMenu() {
+        System.out.println("+ ---------  Running  --------- +");
+        System.out.println("|                               |");
+        System.out.println("|    1. Display all             |");
+        System.out.println("|    2. By Date                 |");
+        System.out.println("|    3. By Duration             |");
+        System.out.println("|    4. By Heart Rate           |");
+        System.out.println("|    5.                         |");
+        System.out.println("|    0. Return                  |");
+        System.out.println("|                               |");
+        System.out.println("+ ----------------------------- +");
+    }
+    public static void RunningInterface(ArrayList<ActivityEntry> e) {
+        boolean exit = false;
+        do {
+            displayRunningMenu();
+
+            ArrayList<ActivityEntry> runningSessions = filterActivities(e, "RUNNING");
+
+            Scanner kb = new Scanner(System.in);
+            // check if input is not a number
+            while (!kb.hasNextInt()) {
+                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
+                kb.next(); // Consume invalid input
+            }
+            int choice = kb.nextInt();
+
+            switch (choice) {
+                case 1:
+                    displaySessions(runningSessions);
+                    break;
+                case 2:
+                    Collections.sort(runningSessions, new DateComparator());
+                    displaySessions(runningSessions);
+                    break;
+                case 3:
+                    Collections.sort(runningSessions, new DurationComparator());
+                    displaySessions(runningSessions);
+                    break;
+                case 4:
+                    Collections.sort(runningSessions, new HeartRateComparator());
+                    displaySessions(runningSessions);
+                    break;
+                case 0: exit = true;
+                default:
+                    System.out.println("Please select from 1-5 from the menu.");
+                    break;
+            }
+        }while(!exit);
+    }
+    public static void displaySwimmingMenu() {
+        System.out.println("+ ---------  Swimming  -------- +");
+        System.out.println("|                               |");
+        System.out.println("|    1. Display all             |");
+        System.out.println("|    2. By Date                 |");
+        System.out.println("|    3. By Duration             |");
+        System.out.println("|    4. By Heart Rate           |");
+        System.out.println("|    5.                         |");
+        System.out.println("|    0. Return                  |");
+        System.out.println("|                               |");
+        System.out.println("+ ----------------------------- +");
+    }
+    public static void SwimmingInterface(ArrayList<ActivityEntry> e) {
+        boolean exit = false;
+        do {
+           displaySwimmingMenu();
+
+            ArrayList<ActivityEntry> swimmingSessions = filterActivities(e, "SWIMMING");
+
+            Scanner kb = new Scanner(System.in);
+            // check if input is not a number
+            while (!kb.hasNextInt()) {
+                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
+                kb.next(); // Consume invalid input
+            }
+            int choice = kb.nextInt();
+
+            switch(choice) {
+                case 1:
+                    displaySessions(swimmingSessions);
+                    break;
+                case 2:
+                    Collections.sort(swimmingSessions, new DateComparator());
+                    displaySessions(swimmingSessions);
+                    break;
+                case 3:
+                    Collections.sort(swimmingSessions, new DurationComparator());
+                    displaySessions(swimmingSessions);
+                    break;
+                case 4:
+                    Collections.sort(swimmingSessions, new HeartRateComparator());
+                    displaySessions(swimmingSessions);
+                    break;
+                case 0: exit = true;
+                default:
+                    System.out.println("Please select from 1-5 from the menu.");
+                    break;
+            }
+        }while(!exit);
+    }
+    public static void displayCyclingMenu() {
+        System.out.println("+ ---------  Cycling  --------- +");
+        System.out.println("|                               |");
+        System.out.println("|    1. Display all             |");
+        System.out.println("|    2. By Date                 |");
+        System.out.println("|    3. By Duration             |");
+        System.out.println("|    4. By Heart Rate           |");
+        System.out.println("|    5.                         |");
+        System.out.println("|    0. Return                  |");
+        System.out.println("|                               |");
+        System.out.println("+ ----------------------------- +");
+    }
+    public static void CyclingInterface(ArrayList<ActivityEntry> e) {
+        boolean exit = false;
+        do {
+            displayCyclingMenu();
+
+            ArrayList<ActivityEntry> cyclingSessions = filterActivities(e, "CYCLING");
+
+            Scanner kb = new Scanner(System.in);
+            // check if input is not a number
+            while (!kb.hasNextInt()) {
+                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
+                kb.next(); // Consume invalid input
+            }
+            int choice = kb.nextInt();
+
+            switch(choice) {
+                case 1:
+                    displaySessions(cyclingSessions);
+                    break;
+                case 2:
+                    Collections.sort(cyclingSessions, new DateComparator());
+                    displaySessions(cyclingSessions);
+                    break;
+                case 3:
+                    Collections.sort(cyclingSessions, new DurationComparator());
+                    displaySessions(cyclingSessions);
+                    break;
+                case 4:
+                    Collections.sort(cyclingSessions, new HeartRateComparator());
+                    displaySessions(cyclingSessions);
+                    break;
+                case 0: exit = true;
+                default:
+                    System.out.println("Please select from 1-5 from the menu.");
+                    break;
+            }
+        }while(!exit);
+    }
+
 }
