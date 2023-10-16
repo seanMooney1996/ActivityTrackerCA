@@ -1,6 +1,16 @@
 public class Cycling extends ActivityEntry{
 
-    private String activityType = "Cycling";
+    final private String activityType = "Cycling";
+
+    @Override
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public Cycling(String date, double distance, int heartRate, int duration) {
+        super(date,distance,heartRate,duration);
+
+    }
     @Override
     public String toString() {
         return "ActivityEntry{" +
