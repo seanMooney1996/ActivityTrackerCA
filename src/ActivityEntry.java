@@ -1,6 +1,6 @@
 public class ActivityEntry {
-    public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS};
-    private double intensityValue;
+    public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
+
     final private String activityType = "Default";
     private String date;
     private double distance;
@@ -26,10 +26,6 @@ public class ActivityEntry {
         this.duration = 0;
     }
 
-
-    public double getIntensityValue() {
-        return intensityValue;
-    }
 
     public String getDate() {
         return date;
