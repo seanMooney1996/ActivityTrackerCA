@@ -1,5 +1,13 @@
 public class Swimming extends ActivityEntry{
-    private String activityType = "Swimming";
+    final private String activityType = "Swimming";
+
+    public Swimming(String date, double distance, int heartRate, int duration) {
+        super(date,distance,heartRate,duration);
+    }
+
+    public String getActivityType() {
+        return activityType;
+    }
 
     @Override
     public String toString() {

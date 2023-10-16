@@ -4,6 +4,10 @@ public class Running extends ActivityEntry {
         return activityType;
     }
 
+    public Running(String date, double distance, int heartRate, int duration) {
+        super(date,distance,heartRate,duration);
+    }
+
     @Override
     public String toString() {
         return "ActivityEntry{" +

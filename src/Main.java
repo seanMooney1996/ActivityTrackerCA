@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Main {
@@ -75,14 +77,26 @@ public class Main {
         double distance;
         int heartRate;
         StringTokenizer st = new StringTokenizer(line, ",");
-        String activityString = st.nextToken().trim().toUpperCase();
-
-
+        String activityString = st.nextToken().trim();
         date = st.nextToken().trim();
+
         duration = Integer.parseInt(st.nextToken().trim());
         distance = Double.parseDouble(st.nextToken().trim());
         heartRate = Integer.parseInt(st.nextToken().trim());
-        return new ActivityEntry(date,distance,heartRate,duration);
+
+        ActivityEntry e;
+
+        if (activityString.equals("Running")){
+           e = new Running(date,distance,heartRate,duration);
+        } else if (activityString.equals("Swimming")) {
+          e = new Swimming(date,distance,heartRate,duration);
+        } else if (activityString.equalsIgnoreCase("Cycling")) {
+            e = new Cycling(date,distance,heartRate,duration);
+        } else {
+            e = new ActivityEntry();
+            // default if encountering an error in reading in activity type
+        }
+        return e;
     }
 
     public static void addActivityEntry(ArrayList<ActivityEntry> e) {
@@ -193,7 +207,7 @@ public class Main {
         System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate\t\t|");
 
         for(ActivityEntry e: entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s |\n",e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
         }
         System.out.println("+===========================================================================+");
     }

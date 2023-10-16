@@ -1,7 +1,7 @@
 public class ActivityEntry {
-
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS};
     private double intensityValue;
+    final private String activityType = "Default";
     private String date;
     private double distance;
     private int heartRate;
@@ -13,6 +13,10 @@ public class ActivityEntry {
         this.distance = distance;
         this.heartRate = heartRate;
         this.duration = duration;
+    }
+
+    public String getActivityType() {
+        return activityType;
     }
 
     public ActivityEntry() {
