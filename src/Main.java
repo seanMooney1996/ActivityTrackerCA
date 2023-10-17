@@ -9,26 +9,27 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-    public static void main(String[] args)throws IOException {
+    public static void main(String[] args) throws IOException {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
-        loadCSV(records,fileName);
+        loadCSV(records, fileName);
         displayByDistance(records);
         displayByCaloriesBurned(records);
+        displayAverageDistancesPerActivity(getAverageDistances(records));
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         int choice = 0;
 
-        do{
+        do {
             displayMenu();
             // check if input is not a number
-            while(!kb.hasNextInt()) {
+            while (!kb.hasNextInt()) {
                 System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
                 kb.next(); // Consume invalid input
             }
             choice = kb.nextInt();
 
-            switch(choice) {
+            switch (choice) {
 
                 case 0:
                     exit = true;
@@ -51,7 +52,7 @@ public class Main {
                     break;
             }
 
-        }while(!exit);
+        } while (!exit);
     }
 
 
@@ -86,12 +87,12 @@ public class Main {
         ActivityEntry e;
 
 
-        if (activityString.equals("Running")){
-           e = new Running(date,distance,heartRate,duration);
+        if (activityString.equals("Running")) {
+            e = new Running(date, distance, heartRate, duration);
         } else if (activityString.equals("Swimming")) {
-          e = new Swimming(date,distance,heartRate,duration);
+            e = new Swimming(date, distance, heartRate, duration);
         } else if (activityString.equalsIgnoreCase("Cycling")) {
-            e = new Cycling(date,distance,heartRate,duration);
+            e = new Cycling(date, distance, heartRate, duration);
         } else {
             e = new ActivityEntry();
             // default if encountering an error in reading in activity type
@@ -115,7 +116,7 @@ public class Main {
         System.out.println("Activity type:\n1)Running\n2)Swimming\n3)Cycling ");
 
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid input, enter a corresponding number listed from the menu (1-3).");
             kb.next(); // Consume invalid input
         }
@@ -135,11 +136,11 @@ public class Main {
             } else {    // deny input, stay in loop
                 System.out.println("Entered date does not match required format(dd/mm/yyyy)");
             }
-        }while(flagDateInput);
+        } while (flagDateInput);
 
         System.out.println("Distance(km): ");
         // check if input is NOT double OR int
-        while(!kb.hasNextDouble() || !kb.hasNextInt()) {
+        while (!kb.hasNextDouble() || !kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
@@ -147,7 +148,7 @@ public class Main {
 
         System.out.println("Heart Rate: ");
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
@@ -155,16 +156,17 @@ public class Main {
 
         System.out.println("Duration: ");
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
         duration = kb.nextInt();
 
         // add new entry
-        e.add(new ActivityEntry(date,distance,heartRate,duration));
+        e.add(new ActivityEntry(date, distance, heartRate, duration));
         displaySessions(e);
     }
+
     public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
         ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
 
@@ -185,16 +187,18 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
         System.out.println("+==========================\t\t Sessions\t\t===========================+");
         System.out.printf("|\t%-15s %-12s %-10s %-10s %-15s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t|");
 
-        for(ActivityEntry e: entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-15s %-15.1f|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(),e.getCaloriesBurned());
+        for (ActivityEntry e : entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-15s %-15.1f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
         }
         System.out.println("+===========================================================================+");
 
     }
+
     public static void displaySessionsMenu() {
         System.out.println("+ --------  Sessions  --------- +");
         System.out.println("|                               |");
@@ -206,20 +210,21 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
     public static void SessionsInterface(ArrayList<ActivityEntry> e) {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
-        do{
+        do {
             displaySessionsMenu();
             // check if input is not a number
-            while(!kb.hasNextInt()) {
+            while (!kb.hasNextInt()) {
                 System.out.println("Invalid input, enter a corresponding number listed from the menu (0-4).");
                 kb.next(); // Consume invalid input
             }
             int choice = kb.nextInt();
             kb.nextLine();
 
-            switch(choice) {
+            switch (choice) {
                 case 1:
                     displaySessions(e);
                     break;
@@ -237,9 +242,10 @@ public class Main {
                 default:
                     System.out.println("Please select from 1-5 from the menu.");
             }
-        }while(!exit);
+        } while (!exit);
 
     }
+
     public static void displayRunningMenu() {
         System.out.println("+ ---------  Running  --------- +");
         System.out.println("|                               |");
@@ -252,6 +258,7 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
     public static void RunningInterface(ArrayList<ActivityEntry> e) {
         boolean exit = false;
         do {
@@ -283,13 +290,15 @@ public class Main {
                     Collections.sort(runningSessions, new HeartRateComparator());
                     displaySessions(runningSessions);
                     break;
-                case 0: exit = true;
+                case 0:
+                    exit = true;
                 default:
                     System.out.println("Please select from 1-5 from the menu.");
                     break;
             }
-        }while(!exit);
+        } while (!exit);
     }
+
     public static void displaySwimmingMenu() {
         System.out.println("+ ---------  Swimming  -------- +");
         System.out.println("|                               |");
@@ -302,10 +311,11 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
     public static void SwimmingInterface(ArrayList<ActivityEntry> e) {
         boolean exit = false;
         do {
-           displaySwimmingMenu();
+            displaySwimmingMenu();
 
             ArrayList<ActivityEntry> swimmingSessions = filterActivities(e, "SWIMMING");
 
@@ -317,7 +327,7 @@ public class Main {
             }
             int choice = kb.nextInt();
 
-            switch(choice) {
+            switch (choice) {
                 case 1:
                     displaySessions(swimmingSessions);
                     break;
@@ -333,13 +343,15 @@ public class Main {
                     Collections.sort(swimmingSessions, new HeartRateComparator());
                     displaySessions(swimmingSessions);
                     break;
-                case 0: exit = true;
+                case 0:
+                    exit = true;
                 default:
                     System.out.println("Please select from 1-5 from the menu.");
                     break;
             }
-        }while(!exit);
+        } while (!exit);
     }
+
     public static void displayCyclingMenu() {
         System.out.println("+ ---------  Cycling  --------- +");
         System.out.println("|                               |");
@@ -352,6 +364,7 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
     public static void CyclingInterface(ArrayList<ActivityEntry> e) {
         boolean exit = false;
         do {
@@ -367,7 +380,7 @@ public class Main {
             }
             int choice = kb.nextInt();
 
-            switch(choice) {
+            switch (choice) {
                 case 1:
                     displaySessions(cyclingSessions);
                     break;
@@ -383,27 +396,29 @@ public class Main {
                     Collections.sort(cyclingSessions, new HeartRateComparator());
                     displaySessions(cyclingSessions);
                     break;
-                case 0: exit = true;
+                case 0:
+                    exit = true;
                 default:
                     System.out.println("Please select from 1-5 from the menu.");
                     break;
             }
-        }while(!exit);
+        } while (!exit);
     }
 
-    public static void displayByDistance(ArrayList<ActivityEntry> records){
+    public static void displayByDistance(ArrayList<ActivityEntry> records) {
         Collections.sort(records, (e1, e2) ->
         {
-            if (e2.getDistance()>e1.getDistance())
+            if (e2.getDistance() > e1.getDistance())
                 return -1;
-            else if (e1.getDistance()>e2.getDistance())
+            else if (e1.getDistance() > e2.getDistance())
                 return 1;
             else
                 return 0;
         });
         displaySessions(records);
     }
-    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records){
+
+    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
             public int compare(ActivityEntry e1, ActivityEntry e2) {
@@ -417,5 +432,39 @@ public class Main {
             }
         });
         displaySessions(records);
+    }
+
+    public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
+        double runningAvg, cyclingAvg, swimmingAvg;
+        double runningTotal =0;
+        double cyclingTotal = 0;
+        double swimmingTotal = 0;
+        int runningCount = 0;
+        int cyclingCount = 0;
+        int swimmingCount = 0;
+        for (ActivityEntry e : records) {
+            if (e.getActivityType().equals("Running")){
+                runningCount++;
+            runningTotal += e.getDistance();
+        }else if (e.getActivityType().equals("Swimming")) {
+                swimmingCount++;
+                swimmingTotal += e.getDistance();
+            } else {
+                cyclingCount++;
+                cyclingTotal +=  e.getDistance();
+            }
+        }
+        runningAvg = runningTotal/runningCount;
+        swimmingAvg = swimmingTotal/swimmingCount;
+        cyclingAvg = cyclingTotal/cyclingCount;
+        double[] avgs = {runningAvg,swimmingAvg,cyclingAvg};
+        return avgs;
+    }
+    public static void displayAverageDistancesPerActivity(double[] avgs){
+        System.out.printf("|        AVERAGES                |\n");
+        System.out.printf("|    Running  : %.2f             |\n",avgs[0]);
+        System.out.printf("|    Swimming : %.2f             |\n",avgs[1]);
+        System.out.printf("|    Cycling  : %.2f            |\n",avgs[2]);
+        System.out.printf("+ ----------------------------- +\n");
     }
 }
