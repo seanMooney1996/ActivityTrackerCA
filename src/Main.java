@@ -1,19 +1,20 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class Main {
+
     public static void main(String[] args)throws IOException {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
         loadCSV(records,fileName);
-
+        displayByDistance(records);
+        displayByCaloriesBurned(records);
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         int choice = 0;
@@ -83,6 +84,7 @@ public class Main {
         heartRate = Integer.parseInt(st.nextToken().trim());
 
         ActivityEntry e;
+
 
         if (activityString.equals("Running")){
            e = new Running(date,distance,heartRate,duration);
@@ -185,10 +187,10 @@ public class Main {
     }
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
         System.out.println("+==========================\t\t Sessions\t\t===========================+");
-        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate\t\t|");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-15s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t|");
 
         for(ActivityEntry e: entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-15s %-15.1f|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(),e.getCaloriesBurned());
         }
         System.out.println("+===========================================================================+");
 
@@ -387,5 +389,33 @@ public class Main {
                     break;
             }
         }while(!exit);
+    }
+
+    public static void displayByDistance(ArrayList<ActivityEntry> records){
+        Collections.sort(records, (e1, e2) ->
+        {
+            if (e2.getDistance()>e1.getDistance())
+                return -1;
+            else if (e1.getDistance()>e2.getDistance())
+                return 1;
+            else
+                return 0;
+        });
+        displaySessions(records);
+    }
+    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records){
+        Collections.sort(records, new Comparator<ActivityEntry>() {
+            @Override
+            public int compare(ActivityEntry e1, ActivityEntry e2) {
+                if (e1.getCaloriesBurned() > e2.getCaloriesBurned())
+                    return -1;
+                else if (e1.getCaloriesBurned() < e2.getCaloriesBurned())
+                    return +1;
+                else
+                    return 0;
+
+            }
+        });
+        displaySessions(records);
     }
 }
