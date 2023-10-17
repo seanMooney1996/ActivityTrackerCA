@@ -26,7 +26,6 @@ public class ActivityEntry {
         this.duration = 0;
     }
 
-
     public String getDate() {
         return date;
     }
