@@ -36,7 +36,6 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
         this.duration = 0;
     }
 
-
     public String getDate() {
         return date;
     }
