@@ -4,13 +4,13 @@ public class Cycling extends ActivityEntry{
 
     final private INTENSITY intensity = calculateIntensity();
 
-    final private double intensityValue = calculateCaloriesBurned();
+    final private double caloriesBurned = calculateCaloriesBurned();
 
     public INTENSITY getIntensity() {
         return intensity;
     }
-    public double getIntensityValue() {
-        return intensityValue;
+    public double getCaloriesBurned() {
+        return caloriesBurned;
     }
 
 

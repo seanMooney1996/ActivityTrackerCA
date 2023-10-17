@@ -1,4 +1,7 @@
-public class ActivityEntry {
+import java.util.Collections;
+import java.util.Comparator;
+
+public class ActivityEntry implements Comparable<ActivityEntry> {
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
 
     final private String activityType = "Default";
@@ -7,6 +10,13 @@ public class ActivityEntry {
     private int heartRate;
     private int duration;
 
+    private double caloriesBurned = 0;
+
+    private double intensityValue = 0;
+
+    public double getCaloriesBurned() {
+        return caloriesBurned;
+    }
 
     public ActivityEntry(String date, double distance, int heartRate, int duration) {
         this.date = date;
@@ -29,6 +39,10 @@ public class ActivityEntry {
 
     public String getDate() {
         return date;
+    }
+
+    public double getIntensityValue(){
+        return intensityValue;
     }
 
     public void setDate(String date) {
@@ -59,6 +73,15 @@ public class ActivityEntry {
         this.duration = duration;
     }
 
+    @Override
+    public int compareTo(ActivityEntry e){
+        if (this.intensityValue > e.intensityValue)
+            return 1;
+        else if (this.intensityValue < e.getIntensityValue())
+            return -1;
+        else
+            return 0;
+    }
     @Override
     public String toString() {
         return "ActivityEntry{" +
