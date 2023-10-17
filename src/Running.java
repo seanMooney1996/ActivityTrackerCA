@@ -2,7 +2,8 @@ public class Running extends ActivityEntry {
  private final String activityType = "Running";
 
     final private INTENSITY intensity = calculateIntensity();
-    final private double caloriesBurned = calculateCaloriesBurned();
+    final private double intensityValue = calculateCaloriesBurned();
+
 
     public Running(String date, double distance, int heartRate, int duration) {
         super(date,distance,heartRate,duration);
@@ -25,8 +26,8 @@ public class Running extends ActivityEntry {
             return 20.8 * getDuration();
     }
 
-    public double getCaloriesBurned() {
-        return caloriesBurned;
+    public double getIntensityValue() {
+        return intensityValue;
     }
 
     private ActivityEntry.INTENSITY calculateIntensity(){

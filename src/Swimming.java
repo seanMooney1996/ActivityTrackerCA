@@ -3,15 +3,14 @@ public class Swimming extends ActivityEntry{
 
     final private INTENSITY intensity = calculateIntensity();
 
-
-    final private double caloriesBurned = calculateCaloriesBurned();
+    final private double intensityValue = calculateCaloriesBurned();
 
     public Swimming(String date, double distance, int heartRate, int duration) {
         super(date,distance,heartRate,duration);
     }
 
-    public double getCaloriesBurned() {
-        return caloriesBurned;
+    public double getIntensityValue() {
+        return intensityValue;
     }
 
     public ActivityEntry.INTENSITY calculateIntensity(){
