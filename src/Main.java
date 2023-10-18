@@ -561,6 +561,41 @@ public class Main {
             }
         } while (!exit);
     }
+    public static String displayCyclingMenu(boolean whichPage) {
+        StringBuilder selectedPage = new StringBuilder();
+
+        if (!whichPage) // page 1
+        {
+            selectedPage.append("+ ---------  Cycling  --------- +\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|    1. Display all             |\n");
+            selectedPage.append("|    2. By Date                 |\n");
+            selectedPage.append("|    3. By Duration             |\n");
+            selectedPage.append("|    4. By Heart Rate           |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|   -1. Next                    |\n");
+            selectedPage.append("|    0. Return                  |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|          page 1 : 2           |\n");
+            selectedPage.append("+ ----------------------------- +");
+        }
+        if (whichPage) // page 2
+        {
+            selectedPage.append("+ ---------  Cycling  --------- +\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|    1. Above distance X        |\n");
+            selectedPage.append("|    2. Above duration X        |\n");
+            selectedPage.append("|    3. Energy Expended Type    |\n");
+            selectedPage.append("|    0. Return                  |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|          page 2 : 2           |\n");
+            selectedPage.append("+ ----------------------------- +");
+        }
+        return selectedPage.toString();
+    }
+
+
+
 
     public static void displayByDistance(ArrayList<ActivityEntry> records) {
         Collections.sort(records, (e1, e2) ->
@@ -574,9 +609,6 @@ public class Main {
         });
         displaySessions(records);
     }
-
-
-
     public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
@@ -592,7 +624,6 @@ public class Main {
         });
         displaySessions(records);
     }
-
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
         double runningTotal =0;
@@ -627,38 +658,7 @@ public class Main {
         System.out.printf("+ ----------------------------- +\n");
 
     }
-    public static String displayCyclingMenu(boolean whichPage) {
-        StringBuilder selectedPage = new StringBuilder();
 
-        if (!whichPage) // page 1
-        {
-            selectedPage.append("+ ---------  Cycling  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Display all             |\n");
-            selectedPage.append("|    2. By Date                 |\n");
-            selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Heart Rate           |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|   -1. Next                    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 1 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        if (whichPage) // page 2
-        {
-            selectedPage.append("+ ---------  Cycling  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Above distance X        |\n");
-            selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Energy Expended Type    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 2 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        return selectedPage.toString();
-    }
 
 
 
