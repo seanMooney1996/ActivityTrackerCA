@@ -1,24 +1,10 @@
 public class Cycling extends ActivityEntry{
 
-    final private String activityType = "Cycling";
 
-    final private INTENSITY intensity = calculateIntensity();
-
-    final private double caloriesBurned = calculateCaloriesBurned();
-
-    public INTENSITY getIntensity() {
-        return intensity;
-    }
-    public double getCaloriesBurned() {
-        return caloriesBurned;
-    }
+    final private INTENSITY intensity = getIntensityValue();
 
 
-    @Override
-    public String getActivityType() {
-        return activityType;
-    }
-    public INTENSITY calculateIntensity(){
+    public ActivityEntry.INTENSITY getIntensityValue() {
         double kmph = this.getDistance()/((double) this.getDuration() /60);
 
         if (kmph<8)
@@ -32,8 +18,7 @@ public class Cycling extends ActivityEntry{
         else
             return INTENSITY.VERYVIGOROUS;
     }
-
-    public double calculateCaloriesBurned(){
+    public double getCaloriesBurned() {
         if (intensity == INTENSITY.VERYLIGHT)
             return 2 * getDuration();
         else if (intensity == INTENSITY.LIGHT)
@@ -46,15 +31,16 @@ public class Cycling extends ActivityEntry{
             return 15 * getDuration();
     }
 
+
     public Cycling(String date, double distance, int heartRate, int duration) {
-        super(date,distance,heartRate,duration);
+        super("Cycling",date,distance,heartRate,duration);
 
     }
 
     @Override
     public String toString() {
         return "ActivityEntry{" +
-                "ActivityType=" + this.activityType+
+                "ActivityType=" + this.getActivityType()+
                 ", intensity=" + intensity +
                 ", date='" + this.getDate() + '\'' +
                 ", distance=" + this.getDistance() +

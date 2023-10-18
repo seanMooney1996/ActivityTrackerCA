@@ -1,28 +1,23 @@
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ActivityEntry implements Comparable<ActivityEntry> {
+public abstract class ActivityEntry implements Comparable<ActivityEntry> {
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
 
-    final private String activityType = "Default";
+    private String activityType = "Default";
     private String date;
     private double distance;
     private int heartRate;
     private int duration;
 
-    private double caloriesBurned = 0;
 
-    private double intensityValue = 0;
 
-    public double getCaloriesBurned() {
-        return caloriesBurned;
-    }
-
-    public ActivityEntry(String date, double distance, int heartRate, int duration) {
+    public ActivityEntry(String activityType, String date, double distance, int heartRate, int duration) {
         this.date = date;
         this.distance = distance;
         this.heartRate = heartRate;
         this.duration = duration;
+        this.activityType = activityType;
     }
 
     public String getActivityType() {
@@ -38,10 +33,6 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
 
     public String getDate() {
         return date;
-    }
-
-    public double getIntensityValue(){
-        return intensityValue;
     }
 
     public void setDate(String date) {
@@ -72,15 +63,20 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
         this.duration = duration;
     }
 
+    public abstract double getCaloriesBurned();
+
+    public abstract INTENSITY getIntensityValue();
+
     @Override
     public int compareTo(ActivityEntry e){
-        if (this.intensityValue > e.intensityValue)
+        if (this.distance > e.getDistance())
             return 1;
-        else if (this.intensityValue < e.getIntensityValue())
+        else if (this.distance < e.getDistance())
             return -1;
         else
             return 0;
     }
+
     @Override
     public String toString() {
         return "ActivityEntry{" +

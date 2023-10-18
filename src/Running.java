@@ -1,35 +1,12 @@
 public class Running extends ActivityEntry {
-    private final String activityType = "Running";
 
-    final private INTENSITY intensity = calculateIntensity();
-    final private double caloriesBurned = calculateCaloriesBurned();
+    final private INTENSITY intensity = getIntensityValue();
 
     public Running(String date, double distance, int heartRate, int duration) {
-        super(date,distance,heartRate,duration);
+        super("Running", date,distance,heartRate,duration);
     }
 
-    public INTENSITY getIntensity() {
-        return intensity;
-    }
-
-    public double calculateCaloriesBurned(){
-        if (intensity == INTENSITY.VERYLIGHT)
-            return 4.1 * getDuration();
-        else if (intensity == INTENSITY.LIGHT)
-            return 7.2 * getDuration();
-        else if (intensity == INTENSITY.MODERATE)
-            return 10 * getDuration();
-        else if (intensity == INTENSITY.VIGOROUS)
-            return 15.4 * getDuration();
-        else
-            return 20.8 * getDuration();
-    }
-
-    public double getCaloriesBurned() {
-        return caloriesBurned;
-    }
-
-    private ActivityEntry.INTENSITY calculateIntensity(){
+    public ActivityEntry.INTENSITY getIntensityValue() {
         double kmph = this.getDistance()/((double) this.getDuration() /60);
 
         if (kmph<4)
@@ -43,14 +20,26 @@ public class Running extends ActivityEntry {
         else
             return INTENSITY.VERYVIGOROUS;
     }
-    public String getActivityType() {
-        return activityType;
+
+
+    public double getCaloriesBurned() {
+        if (intensity == INTENSITY.VERYLIGHT)
+            return 4.1 * getDuration();
+        else if (intensity == INTENSITY.LIGHT)
+            return 7.2 * getDuration();
+        else if (intensity == INTENSITY.MODERATE)
+            return 10 * getDuration();
+        else if (intensity == INTENSITY.VIGOROUS)
+            return 15.4 * getDuration();
+        else
+            return 20.8 * getDuration();
     }
+
 
     @Override
     public String toString() {
         return "ActivityEntry{" +
-                "ActivityType=" + this.activityType+
+                "ActivityType=" + this.getActivityType()+
                 ", intensity=" + intensity +
                 ", date='" + this.getDate() + '\'' +
                 ", distance=" + this.getDistance() +
