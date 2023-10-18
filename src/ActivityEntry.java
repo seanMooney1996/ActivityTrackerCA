@@ -63,9 +63,11 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
         this.duration = duration;
     }
 
+
     public abstract double getCaloriesBurned();
 
     public abstract INTENSITY getIntensityValue();
+
 
     @Override
     public int compareTo(ActivityEntry e){

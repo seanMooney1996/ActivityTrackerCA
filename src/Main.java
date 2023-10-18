@@ -181,7 +181,6 @@ public class Main {
         }
         return filterByActivities;
     }
-
     public static ArrayList<ActivityEntry> filterByMininumDistance(ArrayList<ActivityEntry> e, double minDistance) {
         ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -190,6 +189,24 @@ public class Main {
             }
         }
         return filteredDistances;
+    }
+    public static ArrayList<ActivityEntry> filterByMininumDuration(ArrayList<ActivityEntry> e, int duration) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (duration <= entries.getDuration()) {
+                filtered.add(entries);
+            }
+        }
+        return filtered;
+    }
+    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (entries.getIntensity().toString().equalsIgnoreCase(intensityString)) {
+                filtered.add(entries);
+            }
+        }
+        return filtered;
     }
 
     // ----------- Displays as a table -----------
@@ -203,6 +220,21 @@ public class Main {
         System.out.println("+==============================================================================================+");
     }
 
+    // TODO----------- Display Ascending/Descending -----------
+    public static void selectOrder(ArrayList<ActivityEntry> entries, boolean whichInput) {
+        // WhichInput - false = distance, true - duration
+
+        // take distance input and display
+        if(!whichInput)
+        {
+
+        }
+        // take duration input and display
+        if(whichInput)
+        {
+
+        }
+    }
 
     // ----------- Display menu -----------
     public static void displayMenu() {
@@ -267,7 +299,6 @@ public class Main {
         }while(!exit);
 
     }
-
     public static void displaySessionsMenu() {
         System.out.println("+ --------  Sessions  --------- +");
         System.out.println("|                               |");
