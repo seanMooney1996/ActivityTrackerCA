@@ -185,6 +185,16 @@ public class Main {
         return filterByActivities;
     }
 
+    public static ArrayList<ActivityEntry> filterByMininumDistance(ArrayList<ActivityEntry> e, double minDistance) {
+        ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (minDistance <= entries.getDistance()) {
+                filteredDistances.add(entries);
+            }
+        }
+        return filteredDistances;
+    }
+
     // ----------- Displays as a table -----------
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
         System.out.println("+==========================\t\t Sessions\t\t===========================+");
@@ -596,7 +606,7 @@ public class Main {
 
 
 
-
+    // uses lambda function
     public static void displayByDistance(ArrayList<ActivityEntry> records) {
         Collections.sort(records, (e1, e2) ->
         {
@@ -609,6 +619,7 @@ public class Main {
         });
         displaySessions(records);
     }
+    // anonymous inner class
     public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
@@ -658,11 +669,5 @@ public class Main {
         System.out.printf("+ ----------------------------- +\n");
 
     }
-
-
-
-
-
-
 
 }
