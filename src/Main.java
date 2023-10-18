@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -165,8 +164,12 @@ public class Main {
         duration = kb.nextInt();
 
         // add new entry
-        if(activityTypeChoice==1)
-        e.add(new Running(date,distance,heartRate,duration));
+        if(activityTypeChoice == 1)
+            e.add(new Running(date,distance,heartRate,duration));
+        if(activityTypeChoice == 2)
+            e.add(new Swimming(date,distance,heartRate,duration));
+        if(activityTypeChoice == 3)
+            e.add(new Cycling(date,distance,heartRate,duration));
         displaySessions(e);
     }
 
@@ -181,7 +184,7 @@ public class Main {
         }
         return filterByActivities;
     }
-    public static ArrayList<ActivityEntry> filterByMininumDistance(ArrayList<ActivityEntry> e, double minDistance) {
+    public static ArrayList<ActivityEntry> filterByMinimumDistance(ArrayList<ActivityEntry> e, double minDistance) {
         ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
         for (ActivityEntry entries : e) {
             if (minDistance <= entries.getDistance()) {
@@ -190,7 +193,7 @@ public class Main {
         }
         return filteredDistances;
     }
-    public static ArrayList<ActivityEntry> filterByMininumDuration(ArrayList<ActivityEntry> e, int duration) {
+    public static ArrayList<ActivityEntry> filterByMinimumDuration(ArrayList<ActivityEntry> e, int duration) {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
             if (duration <= entries.getDuration()) {
@@ -202,7 +205,7 @@ public class Main {
     public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
-            if (entries.getIntensity().toString().equalsIgnoreCase(intensityString)) {
+            if (entries.getIntensityValue().toString().equalsIgnoreCase(intensityString)) {
                 filtered.add(entries);
             }
         }
@@ -220,21 +223,15 @@ public class Main {
         System.out.println("+==============================================================================================+");
     }
 
-    // TODO----------- Display Ascending/Descending -----------
-    public static void selectOrder(ArrayList<ActivityEntry> entries, boolean whichInput) {
-        // WhichInput - false = distance, true - duration
-
-        // take distance input and display
-        if(!whichInput)
-        {
-
-        }
-        // take duration input and display
-        if(whichInput)
-        {
-
-        }
+    public static void displaySelectOrder(){
+        System.out.println("+ ------ Select Activity ----- +");
+        System.out.println("|                              |");
+        System.out.println("|         1. Ascending         |");
+        System.out.println("|         2. Descending         |");
+        System.out.println("|                              |");
+        System.out.println("+ ---------------------------- +");
     }
+
 
     // ----------- Display menu -----------
     public static void displayMenu() {
@@ -318,6 +315,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
+        double duration = 0;
         do {
             // Create a nw ArrayList of all entries that are of type 'Running'
             ArrayList<ActivityEntry> runningSessions = filterActivities(e, "Running");
@@ -368,7 +366,16 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
+                        System.out.print("Enter a  maximum distance: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        duration = kb.nextInt();
+                        displaySessions(filterByMinimumDistance(runningSessions,
+                                duration));
+
                         break;
                     case 2:
                         // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
@@ -377,7 +384,6 @@ public class Main {
                         displayByCaloriesBurned(runningSessions);
                         break;
                     case 4:
-                        // TODO Method to show the energy expended for each activity in a subset
                         break;
                     case 0:
                         page = false; // return to previous page
@@ -431,6 +437,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
+        int duration;
         do {
             // Create a new ArrayList of all entries that are of type 'Swimming'
             ArrayList<ActivityEntry> swimmingSessions = filterActivities(e, "Swimming");
@@ -481,8 +488,17 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
-                        break;
+                    System.out.print("Enter a  maximum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    duration = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(swimmingSessions,
+                            duration));
+
+                    break;
                     case 2:
                         // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
                         break;
@@ -543,6 +559,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
+        int duration;
         do {
             // Create a new ArrayList of all entries that are of type 'Swimming'
             ArrayList<ActivityEntry> cyclingSessions = filterActivities(e, "Cycling");
@@ -605,8 +622,17 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
-                        break;
+                    System.out.print("Enter a  maximum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    duration = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(cyclingSessions,
+                            duration));
+
+                    break;
                     case 2:
                         // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
                         break;
