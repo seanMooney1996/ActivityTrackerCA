@@ -194,6 +194,24 @@ public class Main {
         }
         return filteredDistances;
     }
+    public static ArrayList<ActivityEntry> filterByMininumDuration(ArrayList<ActivityEntry> e, int duration) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (duration <= entries.getDuration()) {
+                filtered.add(entries);
+            }
+        }
+        return filtered;
+    }
+    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (entries.getIntensity().toString().equalsIgnoreCase(intensityString)) {
+                filtered.add(entries);
+            }
+        }
+        return filtered;
+    }
 
     // ----------- Displays as a table -----------
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
