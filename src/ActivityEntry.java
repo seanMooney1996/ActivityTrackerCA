@@ -72,6 +72,10 @@ public class ActivityEntry implements Comparable<ActivityEntry> {
         this.duration = duration;
     }
 
+    public INTENSITY getIntensity() {
+        return INTENSITY.DEFAULT;
+    }
+
     @Override
     public int compareTo(ActivityEntry e){
         if (this.intensityValue > e.intensityValue)
