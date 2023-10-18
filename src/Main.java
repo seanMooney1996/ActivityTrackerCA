@@ -197,14 +197,13 @@ public class Main {
 
     // ----------- Displays as a table -----------
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
-        System.out.println("+==========================\t\t Sessions\t\t===========================+");
-        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate\t\t|");
+        System.out.println("+================================\t\t Sessions\t\t=======================================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
 
-        for(ActivityEntry e: entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s|\n",e.getActivityType(),e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate());
+        for(ActivityEntry e : entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
         }
-        System.out.println("+===========================================================================+");
-
+        System.out.println("+==============================================================================================+");
     }
 
 
@@ -319,34 +318,42 @@ public class Main {
                         displaySessions(runningSessions);
                         break;
                     case 4:
+                        displayByDistance(runningSessions);
+                        break;
+                    case 5:
                         Collections.sort(runningSessions, new HeartRateComparator());
                         displaySessions(runningSessions);
                         break;
                     case -1:
-                        page = true; // move to second page
+                        page = true; // move to the second page
                         break;
                     case 0:
-                        exit = true; // exit this menu
+                        exit = true; // exit this menu;
                         break;
                     default:
-                        System.out.println("Select from one of the menu options -1 -> 4");
+                        System.out.println("Select from one of the menu options -1 -> 5");
                         break;
                 }
             }
 
             // if your on the first page, you can select these options
             if(page) {
-                switch(choice) {
+                switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE
+                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
                         break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION
+                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
                         break;
                     case 3:
-                        // TODO Method to return the energy expended type all entries
+                        displayByCaloriesBurned(runningSessions);
+                        break;
+                    case 4:
+                        // TODO Method to show the energy expended for each activity in a subset
+                        break;
                     case 0:
                         page = false; // return to previous page
+                        break;
                     default:
                         System.out.println("Select from one of the menu options 0 -> 3");
                         break;
@@ -365,7 +372,8 @@ public class Main {
             selectedPage.append("|    1. Display all             |\n");
             selectedPage.append("|    2. By Date                 |\n");
             selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Heart Rate           |\n");
+            selectedPage.append("|    4. By Distance             |\n");
+            selectedPage.append("|    5. By Heart Rate           |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|   -1. Next                    |\n");
             selectedPage.append("|    0. Return                  |\n");
@@ -379,7 +387,8 @@ public class Main {
             selectedPage.append("|                               |\n");
             selectedPage.append("|    1. Above distance X        |\n");
             selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Energy Expended Type    |\n");
+            selectedPage.append("|    3. Calories Burned         |\n");
+            selectedPage.append("|    4. Energy Expended Type    |\n");
             selectedPage.append("|    0. Return                  |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|          page 2 : 2           |\n");
@@ -422,8 +431,12 @@ public class Main {
                         displaySessions(swimmingSessions);
                         break;
                     case 4:
+                        displayByDistance(swimmingSessions);
+                        break;
+                    case 5:
                         Collections.sort(swimmingSessions, new HeartRateComparator());
                         displaySessions(swimmingSessions);
+                        break;
                     case -1:
                         page = true; // move to the second page
                         break;
@@ -431,7 +444,7 @@ public class Main {
                         exit = true; // exit this menu;
                         break;
                     default:
-                        System.out.println("Select from one of the menu options -1 -> 4");
+                        System.out.println("Select from one of the menu options -1 -> 5");
                         break;
                 }
             }
@@ -440,15 +453,20 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE
+                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
                         break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION
+                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
                         break;
                     case 3:
-                        // TODO Method to return the ENERGY EXPENDED TYPE all entries
+                        displayByCaloriesBurned(swimmingSessions);
+                        break;
+                    case 4:
+                        // TODO Method to show the energy expended for each activity in a subset
+                        break;
                     case 0:
                         page = false; // return to previous page
+                        break;
                     default:
                         System.out.println("Select from one of the menu options 0 -> 3");
                         break;
@@ -466,7 +484,8 @@ public class Main {
             selectedPage.append("|    1. Display all             |\n");
             selectedPage.append("|    2. By Date                 |\n");
             selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Heart Rate           |\n");
+            selectedPage.append("|    4. By Distance             |\n");
+            selectedPage.append("|    5. By Heart Rate           |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|   -1. Next                    |\n");
             selectedPage.append("|    0. Return                  |\n");
@@ -480,7 +499,8 @@ public class Main {
             selectedPage.append("|                               |\n");
             selectedPage.append("|    1. Above distance X        |\n");
             selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Energy Expended Type    |\n");
+            selectedPage.append("|    3. Calories Burned         |\n");
+            selectedPage.append("|    4. Energy Expended Type    |\n");
             selectedPage.append("|    0. Return                  |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|          page 2 : 2           |\n");
@@ -535,8 +555,12 @@ public class Main {
                         displaySessions(cyclingSessions);
                         break;
                     case 4:
+                        displayByDistance(cyclingSessions);
+                        break;
+                    case 5:
                         Collections.sort(cyclingSessions, new HeartRateComparator());
                         displaySessions(cyclingSessions);
+                        break;
                     case -1:
                         page = true; // move to the second page
                         break;
@@ -544,7 +568,7 @@ public class Main {
                         exit = true; // exit this menu;
                         break;
                     default:
-                        System.out.println("Select from one of the menu options -1 -> 4");
+                        System.out.println("Select from one of the menu options -1 -> 5");
                         break;
                 }
             }
@@ -553,19 +577,22 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE
+                        // TODO Method to take in a DISTANCE X and display all entries above that DISTANCE - LUKE
                         break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION
+                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
                         break;
                     case 3:
-                        // TODO Method to return the ENERGY EXPENDED TYPE all entries
+                        displayByCaloriesBurned(cyclingSessions);
+                        break;
+                    case 4:
+                       // TODO Method to show the energy expended for each activity in a subset
                         break;
                     case 0:
                         page = false; // return to previous page
                         break;
                     default:
-                        System.out.println("Select from one of the menu options 0 -> 3");
+                        System.out.println("Select from one of the menu options 0 -> 4");
                         break;
                 }
             }
@@ -581,7 +608,8 @@ public class Main {
             selectedPage.append("|    1. Display all             |\n");
             selectedPage.append("|    2. By Date                 |\n");
             selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Heart Rate           |\n");
+            selectedPage.append("|    4. By Distance             |\n");
+            selectedPage.append("|    5. By Heart Rate           |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|   -1. Next                    |\n");
             selectedPage.append("|    0. Return                  |\n");
@@ -595,7 +623,8 @@ public class Main {
             selectedPage.append("|                               |\n");
             selectedPage.append("|    1. Above distance X        |\n");
             selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Energy Expended Type    |\n");
+            selectedPage.append("|    3. Calories Burned         |\n");
+            selectedPage.append("|    4. Energy Expended Type    |\n");
             selectedPage.append("|    0. Return                  |\n");
             selectedPage.append("|                               |\n");
             selectedPage.append("|          page 2 : 2           |\n");
