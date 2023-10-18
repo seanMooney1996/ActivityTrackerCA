@@ -184,7 +184,6 @@ public class Main {
         }
         return filterByActivities;
     }
-
     public static ArrayList<ActivityEntry> filterByMininumDistance(ArrayList<ActivityEntry> e, double minDistance) {
         ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -224,6 +223,21 @@ public class Main {
         System.out.println("+==============================================================================================+");
     }
 
+    // TODO----------- Display Ascending/Descending -----------
+    public static void selectOrder(ArrayList<ActivityEntry> entries, boolean whichInput) {
+        // WhichInput - false = distance, true - duration
+
+        // take distance input and display
+        if(!whichInput)
+        {
+
+        }
+        // take duration input and display
+        if(whichInput)
+        {
+
+        }
+    }
 
     // ----------- Display menu -----------
     public static void displayMenu() {
@@ -288,7 +302,6 @@ public class Main {
         }while(!exit);
 
     }
-
     public static void displaySessionsMenu() {
         System.out.println("+ --------  Sessions  --------- +");
         System.out.println("|                               |");
