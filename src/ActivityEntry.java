@@ -1,5 +1,6 @@
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public abstract class ActivityEntry implements Comparable<ActivityEntry> {
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
@@ -68,6 +69,17 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
 
     public abstract INTENSITY getIntensityValue();
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ActivityEntry other = (ActivityEntry)o;
+        if (this.getDate().equalsIgnoreCase(other.getDate()) && getHeartRate() == other.getHeartRate()){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public int compareTo(ActivityEntry e){

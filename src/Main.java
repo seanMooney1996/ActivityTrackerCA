@@ -71,6 +71,8 @@ public class Main {
                 records.add(entry);
             }
         }
+        //removing any duplicate entries
+        removeDuplicates(records);
     }
     private static ActivityEntry parseLine(String line) {
         // To set default value to invalid in-case of entry not including (swimming,running,cycling)
@@ -730,6 +732,15 @@ public class Main {
         });
         displaySessions(records);
     }
+    public static void displayByActivity(ArrayList<ActivityEntry> records) {
+        Collections.sort(records, new Comparator<ActivityEntry>() {
+            @Override
+            public int compare(ActivityEntry e1, ActivityEntry e2) {
+                return e1.getActivityType().compareTo(e2.getActivityType());
+            }
+        });
+        displaySessions(records);
+    }
 
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
@@ -764,6 +775,24 @@ public class Main {
         System.out.printf("|    Cycling  : %.2f            |\n",avgs[2]);
         System.out.printf("+ ----------------------------- +\n");
 
+    }
+
+    // iterates through the records array to check for duplicates using Overrode version of .equals
+    public static void removeDuplicates(ArrayList<ActivityEntry> records){
+        System.out.println("removing duplicates");
+        int size = records.size();
+        for (int i = 0; i < size; i++) {
+            ActivityEntry entry1 = records.get(i);
+            for (int j = i + 1; j < size; j++) {
+                ActivityEntry entry2 = records.get(j);
+                if (entry1.equals(entry2)) {
+                    System.out.println("removing 1");
+                    records.remove(j);
+                    size--;
+                    j--;
+                }
+            }
+        }
     }
 
 }
