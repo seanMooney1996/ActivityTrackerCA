@@ -336,15 +336,15 @@ public class Main {
                         displaySessions(runningSessions);
                         break;
                     case 2:
-                        Collections.sort(runningSessions, new DateComparator());
+                        Collections.sort(runningSessions, new DateComparator(true));
                         displaySessions(runningSessions);
                         break;
                     case 3:
-                        Collections.sort(runningSessions, new DurationComparator());
+                        Collections.sort(runningSessions, new DurationComparator(true));
                         displaySessions(runningSessions);
                         break;
                     case 4:
-                        displayByDistance(runningSessions);
+                        displayByDistance(runningSessions,true);
                         break;
                     case 5:
                         Collections.sort(runningSessions, new HeartRateComparator());
@@ -458,15 +458,15 @@ public class Main {
                         displaySessions(swimmingSessions);
                         break;
                     case 2:
-                        Collections.sort(swimmingSessions, new DateComparator());
+                        Collections.sort(swimmingSessions, new DateComparator(true));
                         displaySessions(swimmingSessions);
                         break;
                     case 3:
-                        Collections.sort(swimmingSessions, new DurationComparator());
+                        Collections.sort(swimmingSessions, new DurationComparator(true));
                         displaySessions(swimmingSessions);
                         break;
                     case 4:
-                        displayByDistance(swimmingSessions);
+                        displayByDistance(swimmingSessions,true);
                         break;
                     case 5:
                         Collections.sort(swimmingSessions, new HeartRateComparator());
@@ -592,15 +592,15 @@ public class Main {
                         displaySessions(cyclingSessions);
                         break;
                     case 2:
-                        Collections.sort(cyclingSessions, new DateComparator());
+                        Collections.sort(cyclingSessions, new DateComparator(true));
                         displaySessions(cyclingSessions);
                         break;
                     case 3:
-                        Collections.sort(cyclingSessions, new DurationComparator());
+                        Collections.sort(cyclingSessions, new DurationComparator(true));
                         displaySessions(cyclingSessions);
                         break;
                     case 4:
-                        displayByDistance(cyclingSessions);
+                        displayByDistance(cyclingSessions,true);
                         break;
                     case 5:
                         Collections.sort(cyclingSessions, new HeartRateComparator());
@@ -690,16 +690,28 @@ public class Main {
 
 
     // uses lambda function
-    public static void displayByDistance(ArrayList<ActivityEntry> records) {
-        Collections.sort(records, (e1, e2) ->
-        {
-            if (e2.getDistance() > e1.getDistance())
-                return -1;
-            else if (e1.getDistance() > e2.getDistance())
-                return 1;
-            else
-                return 0;
-        });
+    public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
+        if (ascending) {
+            Collections.sort(records, (e1, e2) ->
+            {
+                if (e2.getDistance() > e1.getDistance())
+                    return -1;
+                else if (e1.getDistance() > e2.getDistance())
+                    return 1;
+                else
+                    return 0;
+            });
+        } else {
+            Collections.sort(records, (e1, e2) ->
+            {
+                if (e2.getDistance() > e1.getDistance())
+                    return 1;
+                else if (e1.getDistance() > e2.getDistance())
+                    return -1;
+                else
+                    return 0;
+            });
+        }
         displaySessions(records);
     }
     // anonymous inner class
@@ -718,6 +730,7 @@ public class Main {
         });
         displaySessions(records);
     }
+
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
         double runningTotal =0;
