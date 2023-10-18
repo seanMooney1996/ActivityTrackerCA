@@ -95,12 +95,8 @@ public class Main {
         else if (activityString.equals("Swimming")) {
           e = new Swimming(date,distance,heartRate,duration);
         }
-        else if (activityString.equalsIgnoreCase("Cycling")) {
+        else  {
             e = new Cycling(date,distance,heartRate,duration);
-        }
-        else {
-            e = new ActivityEntry();
-            // default if encountering an error in reading in activity type
         }
         return e;
     }
@@ -169,7 +165,8 @@ public class Main {
         duration = kb.nextInt();
 
         // add new entry
-        e.add(new ActivityEntry(date,distance,heartRate,duration));
+        if(activityTypeChoice==1)
+        e.add(new Running(date,distance,heartRate,duration));
         displaySessions(e);
     }
 
