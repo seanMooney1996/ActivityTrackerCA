@@ -316,6 +316,7 @@ public class Main {
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
         double duration = 0;
+        int distance = 0;
         do {
             // Create a nw ArrayList of all entries that are of type 'Running'
             ArrayList<ActivityEntry> runningSessions = filterActivities(e, "Running");
@@ -366,19 +367,28 @@ public class Main {
             if(page) {
                 switch (choice) {
                     case 1:
-                        System.out.print("Enter a  maximum distance: ");
+                        System.out.print("Enter a  minimum distance: ");
                         // if the next input is not a number or less than one - enter loop
                         while(!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
-                        duration = kb.nextInt();
+                        duration = kb.nextDouble();
                         displaySessions(filterByMinimumDistance(runningSessions,
                                 duration));
 
                         break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
+                        System.out.println("Enter a minimum duration: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        distance = kb.nextInt();
+                        displaySessions(filterByMinimumDuration(runningSessions,
+                                distance));
+
                         break;
                     case 3:
                         displayByCaloriesBurned(runningSessions);
@@ -437,7 +447,8 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
-        int duration;
+        double duration = 0.0;
+        int distance = 0;
         do {
             // Create a new ArrayList of all entries that are of type 'Swimming'
             ArrayList<ActivityEntry> swimmingSessions = filterActivities(e, "Swimming");
@@ -500,7 +511,15 @@ public class Main {
 
                     break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
+                        System.out.println("Enter a minimum duration: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        distance = kb.nextInt();
+                        displaySessions(filterByMinimumDuration(swimmingSessions,
+                                distance));
                         break;
                     case 3:
                         displayByCaloriesBurned(swimmingSessions);
@@ -559,7 +578,8 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
-        int duration;
+        double duration = 0.0;
+        int distance = 0;
         do {
             // Create a new ArrayList of all entries that are of type 'Swimming'
             ArrayList<ActivityEntry> cyclingSessions = filterActivities(e, "Cycling");
@@ -634,7 +654,15 @@ public class Main {
 
                     break;
                     case 2:
-                        // TODO Method to take in a DURATION X and display all entries above that DURATION - LUKE
+                        System.out.println("Enter a minimum duration: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        distance = kb.nextInt();
+                        displaySessions(filterByMinimumDuration(cyclingSessions,
+                                distance));
                         break;
                     case 3:
                         displayByCaloriesBurned(cyclingSessions);
