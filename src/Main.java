@@ -225,13 +225,24 @@ public class Main {
         System.out.println("+==============================================================================================+");
     }
 
-    public static void displaySelectOrder(){
-        System.out.println("+ ------ Select Activity ----- +");
+    public static boolean selectOrder(){
+        Scanner kb = new Scanner(System.in);
+        System.out.println("+ ------- Select Order ------- +");
         System.out.println("|                              |");
         System.out.println("|         1. Ascending         |");
-        System.out.println("|         2. Descending         |");
+        System.out.println("|         2. Descending        |");
         System.out.println("|                              |");
         System.out.println("+ ---------------------------- +");
+
+        while (!kb.hasNextInt()) {
+            System.out.println("Select 1 for ASCENDING | 2 for DESCENDING");
+            kb.next(); // Consume invalid input
+        }
+        int choice = kb.nextInt();
+        if(choice == 1)
+            return  true; // Ascending
+        else
+            return false; // Descending
     }
 
 
@@ -248,6 +259,7 @@ public class Main {
         System.out.println("|                               |");
         System.out.println("+ ----------------------------- +");
     }
+
 
     // ----------- Select activity -----------
     public static void displaySelectActivity() {
@@ -317,6 +329,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
+        boolean order;
         double duration = 0;
         int distance = 0;
         do {
@@ -339,15 +352,15 @@ public class Main {
                         displaySessions(runningSessions);
                         break;
                     case 2:
-                        Collections.sort(runningSessions, new DateComparator(true));
-                        displaySessions(runningSessions);
+                        Collections.sort(runningSessions, new DateComparator(selectOrder())); // call selectOrder method
+                        displaySessions(runningSessions);                                     // to get the ASCE/DESC order
                         break;
                     case 3:
-                        Collections.sort(runningSessions, new DurationComparator(true));
+                        Collections.sort(runningSessions, new DurationComparator(selectOrder()));
                         displaySessions(runningSessions);
                         break;
                     case 4:
-                        displayByDistance(runningSessions,true);
+                        displayByDistance(runningSessions,selectOrder());
                         break;
                     case 5:
                         Collections.sort(runningSessions, new HeartRateComparator());
@@ -449,6 +462,7 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
+        boolean order;
         double duration = 0.0;
         int distance = 0;
         do {
@@ -471,15 +485,15 @@ public class Main {
                         displaySessions(swimmingSessions);
                         break;
                     case 2:
-                        Collections.sort(swimmingSessions, new DateComparator(true));
-                        displaySessions(swimmingSessions);
+                        Collections.sort(swimmingSessions, new DateComparator(selectOrder()));// call selectOrder method
+                        displaySessions(swimmingSessions);                                    // to get the ASCE/DESC order
                         break;
                     case 3:
-                        Collections.sort(swimmingSessions, new DurationComparator(true));
+                        Collections.sort(swimmingSessions, new DurationComparator(selectOrder()));
                         displaySessions(swimmingSessions);
                         break;
                     case 4:
-                        displayByDistance(swimmingSessions,true);
+                        displayByDistance(swimmingSessions,selectOrder());
                         break;
                     case 5:
                         Collections.sort(swimmingSessions, new HeartRateComparator());
@@ -614,15 +628,15 @@ public class Main {
                         displaySessions(cyclingSessions);
                         break;
                     case 2:
-                        Collections.sort(cyclingSessions, new DateComparator(true));
-                        displaySessions(cyclingSessions);
+                        Collections.sort(cyclingSessions, new DateComparator(selectOrder())); // call selectOrder method
+                        displaySessions(cyclingSessions);                                     // to get the ASCE/DESC value
                         break;
                     case 3:
-                        Collections.sort(cyclingSessions, new DurationComparator(true));
+                        Collections.sort(cyclingSessions, new DurationComparator(selectOrder()));
                         displaySessions(cyclingSessions);
                         break;
                     case 4:
-                        displayByDistance(cyclingSessions,true);
+                        displayByDistance(cyclingSessions,selectOrder());
                         break;
                     case 5:
                         Collections.sort(cyclingSessions, new HeartRateComparator());
@@ -805,7 +819,7 @@ public class Main {
 
     }
 
-    // iterates through the records array to check for duplicates using Overrode version of .equals
+    // Iterates through the records array to check for duplicates using Overrode version of .equals
     public static void removeDuplicates(ArrayList<ActivityEntry> records){
         System.out.println("removing duplicates");
         int size = records.size();
