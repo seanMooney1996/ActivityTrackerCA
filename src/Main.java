@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -102,7 +103,26 @@ public class Main {
         return e;
     }
 
-    // ----------- Add a new activity
+    // Iterates through the records array to check for duplicates using Overrode version of .equals
+    public static void removeDuplicates(ArrayList<ActivityEntry> records){
+        System.out.println("removing duplicates");
+        int size = records.size();
+        for (int i = 0; i < size; i++) {
+            ActivityEntry entry1 = records.get(i);
+            for (int j = i + 1; j < size; j++) {
+                ActivityEntry entry2 = records.get(j);
+                if (entry1.equals(entry2)) {
+                    System.out.println("removing 1");
+                    records.remove(j);
+                    size--;
+                    j--;
+                }
+            }
+        }
+    }
+
+
+    // ----------- Add a new activity -----------
     public static void addActivityEntry(ArrayList<ActivityEntry> e) {
         String date = "";
         double distance = 0.0;
@@ -175,6 +195,7 @@ public class Main {
         displaySessions(e);
     }
 
+
     // ----------- Filters the ArrayList to user requirements
     public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
         ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
@@ -214,17 +235,47 @@ public class Main {
         return filtered;
     }
 
-    // ----------- Displays as a table -----------
-    public static void displaySessions(ArrayList<ActivityEntry> entries) {
-        System.out.println("+================================\t\t Sessions\t\t=======================================+");
-        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
-
-        for(ActivityEntry e : entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
+    // uses lambda function
+    public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
+        if (ascending) {
+            Collections.sort(records, (e1, e2) ->
+            {
+                if (e2.getDistance() > e1.getDistance())
+                    return -1;
+                else if (e1.getDistance() > e2.getDistance())
+                    return 1;
+                else
+                    return 0;
+            });
+        } else {
+            Collections.sort(records, (e1, e2) ->
+            {
+                if (e2.getDistance() > e1.getDistance())
+                    return 1;
+                else if (e1.getDistance() > e2.getDistance())
+                    return -1;
+                else
+                    return 0;
+            });
         }
-        System.out.println("+==============================================================================================+");
+        displaySessions(records);
     }
+    // anonymous inner class
+    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
+        Collections.sort(records, new Comparator<ActivityEntry>() {
+            @Override
+            public int compare(ActivityEntry e1, ActivityEntry e2) {
+                if (e1.getCaloriesBurned() > e2.getCaloriesBurned())
+                    return -1;
+                else if (e1.getCaloriesBurned() < e2.getCaloriesBurned())
+                    return +1;
+                else
+                    return 0;
 
+            }
+        });
+        displaySessions(records);
+    }
     public static boolean selectOrder(){
         Scanner kb = new Scanner(System.in);
         System.out.println("+ ------- Select Order ------- +");
@@ -243,6 +294,17 @@ public class Main {
             return  true; // Ascending
         else
             return false; // Descending
+    }
+
+    // ----------- Displays as a table -----------
+    public static void displaySessions(ArrayList<ActivityEntry> entries) {
+        System.out.println("+================================\t\t Sessions\t\t=======================================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
+
+        for(ActivityEntry e : entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
+        }
+        System.out.println("+==============================================================================================+");
     }
 
 
@@ -277,51 +339,145 @@ public class Main {
     public static void SessionsInterface(ArrayList<ActivityEntry> e) {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
+        boolean page = false; // false = 1, true = 2
+        double duration = 0;
+        int distance = 0;
         do{
-            displaySessionsMenu();
+            System.out.println(displaySessionsMenu(page)); // Print menu onto screen
+
             // check if input is not a number
             while(!kb.hasNextInt()) {
                 System.out.println("Invalid input, enter a corresponding number listed from the menu (0-4).");
                 kb.next(); // Consume invalid input
             }
             int choice = kb.nextInt();
-            kb.nextLine();
 
-            switch(choice) {
-                case 1:
-                    displaySessions(e);
-                    break;
-                case 2:
-                    // TODO
-                    break;
-                case 3:
-                    // TODO
-                    break;
-                case 4:
-                    // TODO
-                    break;
-                case 0:
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Please select from 1-5 from the menu.");
-                    break;
+            // if your on the first page, you can select these options
+            if(!page) {
+                switch (choice){
+                    case 1:
+                        displaySessions(e);
+                        break;
+                    case 2:
+                        displayByActivity(e);
+                        break;
+                    case 3:
+                        Collections.sort(e, new DateComparator(selectOrder()));
+                        displaySessions(e);
+                        break;
+                    case 4:
+                        Collections.sort(e, new DurationComparator(selectOrder()));
+                        displaySessions(e);
+                    case 5:
+                        displayByDistance(e,selectOrder());
+                        break;
+                    case 6:
+                        Collections.sort(e, new HeartRateComparator());
+                        displaySessions(e);
+                        break;
+                    case -1:
+                        page = true; // move to the second page
+                        break;
+                    case 0:
+                        exit = true; // exit this menu
+                        break;
+                    default:
+                        System.out.println("Select from one of the menu options -1 -> 5");
+                        break;
+                }
+
+            }
+            // if your on the first page, you can select these options
+            if(page) {
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter a  minimum distance: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        duration = kb.nextDouble();
+
+                        displaySessions(filterByMinimumDistance(e,
+                                duration));
+                        break;
+                    case 2:
+                        System.out.println("Enter a minimum duration: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while(!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        distance = kb.nextInt();
+                        displaySessions(filterByMinimumDuration(e,
+                                distance));
+                        break;
+                    case 3:
+                        displayByCaloriesBurned(e);
+                        break;
+                    case 4:
+                        // TODO ENERGY EXPENDED
+                        break;
+                    case 0:
+                        page = false; // return to previous page
+                        break;
+                    default:
+                        System.out.println("Select from one of the menu options 0 -> 3");
+                        break;
+                }
             }
         }while(!exit);
 
     }
-    public static void displaySessionsMenu() {
-        System.out.println("+ --------  Sessions  --------- +");
-        System.out.println("|                               |");
-        System.out.println("|    1. Display all             |");
-        System.out.println("|    2.                         |");
-        System.out.println("|    3.                         |");
-        System.out.println("|    4.                         |");
-        System.out.println("|    5.                         |");
-        System.out.println("|    0. Return                  |");
-        System.out.println("|                               |");
-        System.out.println("+ ----------------------------- +");
+    public static String displaySessionsMenu(boolean whichPage) {
+
+        StringBuilder selectedPage = new StringBuilder();
+
+        if (!whichPage) // page 1
+        {
+            selectedPage.append("+ -----  All Activities  ------ +\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|    1. Display all             |\n");
+            selectedPage.append("|    2. By Activity             |\n");
+            selectedPage.append("|    3. By Date                 |\n");
+            selectedPage.append("|    4. By Duration             |\n");
+            selectedPage.append("|    5. By Distance             |\n");
+            selectedPage.append("|    6. By Heart Rate           |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|   -1. Next                    |\n");
+            selectedPage.append("|    0. Return                  |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|          page 1 : 2           |\n");
+            selectedPage.append("+ ----------------------------- +");
+        }
+        if (whichPage) // page 2
+        {
+            selectedPage.append("+ -----  All Activities  ------ +\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|    1. Above distance X        |\n");
+            selectedPage.append("|    2. Above duration X        |\n");
+            selectedPage.append("|    3. Calories Burned         |\n");
+            selectedPage.append("|    4. Energy Expended Type    |\n");
+            selectedPage.append("|    0. Return                  |\n");
+            selectedPage.append("|                               |\n");
+            selectedPage.append("|          page 2 : 2           |\n");
+            selectedPage.append("+ ----------------------------- +");
+        }
+        return selectedPage.toString();
     }
+
+
+    public static void displayByActivity(ArrayList<ActivityEntry> records) {
+        Collections.sort(records, new Comparator<ActivityEntry>() {
+            @Override
+            public int compare(ActivityEntry e1, ActivityEntry e2) {
+                return e1.getActivityType().compareTo(e2.getActivityType());
+            }
+        });
+        displaySessions(records);
+    }
+
 
 
     // ----------- Running -----------
@@ -329,7 +485,6 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         boolean page = false; // false = 1, true = 2
-        boolean order;
         double duration = 0;
         int distance = 0;
         do {
@@ -409,6 +564,7 @@ public class Main {
                         displayByCaloriesBurned(runningSessions);
                         break;
                     case 4:
+                        // TODO ENERGY EXPENDED
                         break;
                     case 0:
                         page = false; // return to previous page
@@ -733,56 +889,7 @@ public class Main {
 
 
 
-    // uses lambda function
-    public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
-        if (ascending) {
-            Collections.sort(records, (e1, e2) ->
-            {
-                if (e2.getDistance() > e1.getDistance())
-                    return -1;
-                else if (e1.getDistance() > e2.getDistance())
-                    return 1;
-                else
-                    return 0;
-            });
-        } else {
-            Collections.sort(records, (e1, e2) ->
-            {
-                if (e2.getDistance() > e1.getDistance())
-                    return 1;
-                else if (e1.getDistance() > e2.getDistance())
-                    return -1;
-                else
-                    return 0;
-            });
-        }
-        displaySessions(records);
-    }
-    // anonymous inner class
-    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
-        Collections.sort(records, new Comparator<ActivityEntry>() {
-            @Override
-            public int compare(ActivityEntry e1, ActivityEntry e2) {
-                if (e1.getCaloriesBurned() > e2.getCaloriesBurned())
-                    return -1;
-                else if (e1.getCaloriesBurned() < e2.getCaloriesBurned())
-                    return +1;
-                else
-                    return 0;
 
-            }
-        });
-        displaySessions(records);
-    }
-    public static void displayByActivity(ArrayList<ActivityEntry> records) {
-        Collections.sort(records, new Comparator<ActivityEntry>() {
-            @Override
-            public int compare(ActivityEntry e1, ActivityEntry e2) {
-                return e1.getActivityType().compareTo(e2.getActivityType());
-            }
-        });
-        displaySessions(records);
-    }
 
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
@@ -817,24 +924,6 @@ public class Main {
         System.out.printf("|    Cycling  : %.2f            |\n",avgs[2]);
         System.out.printf("+ ----------------------------- +\n");
 
-    }
-
-    // Iterates through the records array to check for duplicates using Overrode version of .equals
-    public static void removeDuplicates(ArrayList<ActivityEntry> records){
-        System.out.println("removing duplicates");
-        int size = records.size();
-        for (int i = 0; i < size; i++) {
-            ActivityEntry entry1 = records.get(i);
-            for (int j = i + 1; j < size; j++) {
-                ActivityEntry entry2 = records.get(j);
-                if (entry1.equals(entry2)) {
-                    System.out.println("removing 1");
-                    records.remove(j);
-                    size--;
-                    j--;
-                }
-            }
-        }
     }
 
 }
