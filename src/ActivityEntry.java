@@ -1,11 +1,6 @@
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Objects;
-
 public abstract class ActivityEntry implements Comparable<ActivityEntry> {
     public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
 
-    private String activityType = "Default";
     private String date;
     private double distance;
     private int heartRate;
@@ -13,17 +8,15 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
 
 
 
-    public ActivityEntry(String activityType, String date, double distance, int heartRate, int duration) {
+
+    public ActivityEntry( String date, double distance, int heartRate, int duration) {
         this.date = date;
         this.distance = distance;
         this.heartRate = heartRate;
         this.duration = duration;
-        this.activityType = activityType;
     }
 
-    public String getActivityType() {
-        return activityType;
-    }
+    public abstract String getActivityType();
 
     public ActivityEntry() {
         this.date = "default";
@@ -81,14 +74,30 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
         return false;
     }
 
+    // natural ordering checks --->  distance/heartRate/date/activityType
+
     @Override
     public int compareTo(ActivityEntry e){
-        if (this.distance > e.getDistance())
+        DateComparator d = new DateComparator(true);
+        if (this.distance > e.getDistance()) {
             return 1;
-        else if (this.distance < e.getDistance())
+        } else if (this.distance < e.getDistance()) {
             return -1;
-        else
-            return 0;
+        } else {
+            if(this.heartRate >  e.getHeartRate()){
+                return 1;
+            } else if (this.heartRate <  e.getHeartRate()){
+                return -1;
+            } else {
+                int dateComparison = d.compare(this,e);
+
+            if (dateComparison != 0 ) {
+                return dateComparison;
+            } else {
+                return this.getActivityType().compareTo(e.getActivityType());
+            }
+            }
+        }
     }
 
     @Override
