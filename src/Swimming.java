@@ -4,7 +4,10 @@ public class Swimming extends ActivityEntry{
 
 
     public Swimming(String date, double distance, int heartRate, int duration) {
-        super("Swimming",date,distance,heartRate,duration);
+        super(date,distance,heartRate,duration);
+    }
+    public Swimming() {
+        super();
     }
 
 
@@ -34,6 +37,10 @@ public class Swimming extends ActivityEntry{
             return INTENSITY.VIGOROUS;
         else
             return INTENSITY.VERYVIGOROUS;
+    }
+
+    public String getActivityType(){
+        return "Swimming";
     }
 
     @Override

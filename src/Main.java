@@ -1,32 +1,35 @@
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Collections.binarySearch;
+
 
 public class Main {
-    public static void main(String[] args)throws IOException {
+    public static void main(String[] args) throws IOException {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
-        loadCSV(records,fileName);
+        loadCSV(records, fileName);
 
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
         int choice = 0;
         int activityChoice = 0;
 
-        do{
+        do {
             displayMenu();
             // check if input is not a number
-            while(!kb.hasNextInt()) {
+            while (!kb.hasNextInt()) {
                 System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
                 kb.next(); // Consume invalid input
             }
             choice = kb.nextInt();
 
-            switch(choice) {
+            switch (choice) {
                 case 1:
                     SessionsInterface(records);
                     break;
@@ -57,7 +60,7 @@ public class Main {
                     System.out.println("Select from one of the menu options 0 -> 4");
                     break;
             }
-        }while(!exit);
+        } while (!exit);
     }
 
     // ----------- Load CSV and create ArrayList
@@ -75,6 +78,7 @@ public class Main {
         //removing any duplicate entries
         removeDuplicates(records);
     }
+
     private static ActivityEntry parseLine(String line) {
         // To set default value to invalid in-case of entry not including (swimming,running,cycling)
         String date;
@@ -91,20 +95,18 @@ public class Main {
 
         ActivityEntry e;
 
-        if (activityString.equals("Running")){
-           e = new Running(date,distance,heartRate,duration);
-        }
-        else if (activityString.equals("Swimming")) {
-          e = new Swimming(date,distance,heartRate,duration);
-        }
-        else  {
-            e = new Cycling(date,distance,heartRate,duration);
+        if (activityString.equals("Running")) {
+            e = new Running(date, distance, heartRate, duration);
+        } else if (activityString.equals("Swimming")) {
+            e = new Swimming(date, distance, heartRate, duration);
+        } else {
+            e = new Cycling(date, distance, heartRate, duration);
         }
         return e;
     }
 
     // Iterates through the records array to check for duplicates using Overrode version of .equals
-    public static void removeDuplicates(ArrayList<ActivityEntry> records){
+    public static void removeDuplicates(ArrayList<ActivityEntry> records) {
         System.out.println("removing duplicates");
         int size = records.size();
         for (int i = 0; i < size; i++) {
@@ -139,7 +141,7 @@ public class Main {
         System.out.println("Activity type:\n1)Running\n2)Swimming\n3)Cycling ");
 
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid input, enter a corresponding number listed from the menu (1-3).");
             kb.next(); // Consume invalid input
         }
@@ -159,11 +161,11 @@ public class Main {
             } else {    // deny input, stay in loop
                 System.out.println("Entered date does not match required format(dd/mm/yyyy)");
             }
-        }while(flagDateInput);
+        } while (flagDateInput);
 
         System.out.println("Distance(km): ");
         // check if input is NOT double OR int
-        while(!kb.hasNextDouble() || !kb.hasNextInt()) {
+        while (!kb.hasNextDouble() || !kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
@@ -171,7 +173,7 @@ public class Main {
 
         System.out.println("Heart Rate: ");
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
@@ -179,19 +181,19 @@ public class Main {
 
         System.out.println("Duration: ");
         // check if input is not a number
-        while(!kb.hasNextInt()) {
+        while (!kb.hasNextInt()) {
             System.out.println("Invalid entry, number required.");
             kb.next(); // Consume invalid input
         }
         duration = kb.nextInt();
 
         // add new entry
-        if(activityTypeChoice == 1)
-            e.add(new Running(date,distance,heartRate,duration));
-        if(activityTypeChoice == 2)
-            e.add(new Swimming(date,distance,heartRate,duration));
-        if(activityTypeChoice == 3)
-            e.add(new Cycling(date,distance,heartRate,duration));
+        if (activityTypeChoice == 1)
+            e.add(new Running(date, distance, heartRate, duration));
+        if (activityTypeChoice == 2)
+            e.add(new Swimming(date, distance, heartRate, duration));
+        if (activityTypeChoice == 3)
+            e.add(new Cycling(date, distance, heartRate, duration));
         displaySessions(e);
     }
 
@@ -200,13 +202,14 @@ public class Main {
     public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
         ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
 
-        for(ActivityEntry entries: e) {
-            if(requestedType == entries.getActivityType()) {
+        for (ActivityEntry entries : e) {
+            if (requestedType == entries.getActivityType()) {
                 filterByActivities.add(entries);
             }
         }
         return filterByActivities;
     }
+
     public static ArrayList<ActivityEntry> filterByMinimumDistance(ArrayList<ActivityEntry> e, double minDistance) {
         ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -216,6 +219,7 @@ public class Main {
         }
         return filteredDistances;
     }
+
     public static ArrayList<ActivityEntry> filterByMinimumDuration(ArrayList<ActivityEntry> e, int duration) {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -225,6 +229,7 @@ public class Main {
         }
         return filtered;
     }
+
     public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -236,7 +241,7 @@ public class Main {
     }
 
     // uses lambda function
-    public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
+    public static void displayByDistance(ArrayList<ActivityEntry> records, boolean ascending) {
         if (ascending) {
             Collections.sort(records, (e1, e2) ->
             {
@@ -260,6 +265,7 @@ public class Main {
         }
         displaySessions(records);
     }
+
     // anonymous inner class
     public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
@@ -276,7 +282,8 @@ public class Main {
         });
         displaySessions(records);
     }
-    public static boolean selectOrder(){
+
+    public static boolean selectOrder() {
         Scanner kb = new Scanner(System.in);
         System.out.println("+ ------- Select Order ------- +");
         System.out.println("|                              |");
@@ -290,8 +297,8 @@ public class Main {
             kb.next(); // Consume invalid input
         }
         int choice = kb.nextInt();
-        if(choice == 1)
-            return  true; // Ascending
+        if (choice == 1)
+            return true; // Ascending
         else
             return false; // Descending
     }
@@ -301,7 +308,7 @@ public class Main {
         System.out.println("+================================\t\t Sessions\t\t=======================================+");
         System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
 
-        for(ActivityEntry e : entries) {
+        for (ActivityEntry e : entries) {
             System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
         }
         System.out.println("+==============================================================================================+");
@@ -342,19 +349,19 @@ public class Main {
         boolean page = false; // false = 1, true = 2
         double duration = 0;
         int distance = 0;
-        do{
+        do {
             System.out.println(displaySessionsMenu(page)); // Print menu onto screen
 
             // check if input is not a number
-            while(!kb.hasNextInt()) {
+            while (!kb.hasNextInt()) {
                 System.out.println("Invalid input, enter a corresponding number listed from the menu (0-4).");
                 kb.next(); // Consume invalid input
             }
             int choice = kb.nextInt();
 
             // if your on the first page, you can select these options
-            if(!page) {
-                switch (choice){
+            if (!page) {
+                switch (choice) {
                     case 1:
                         displaySessions(e);
                         break;
@@ -369,7 +376,7 @@ public class Main {
                         Collections.sort(e, new DurationComparator(selectOrder()));
                         displaySessions(e);
                     case 5:
-                        displayByDistance(e,selectOrder());
+                        displayByDistance(e, selectOrder());
                         break;
                     case 6:
                         Collections.sort(e, new HeartRateComparator());
@@ -388,12 +395,12 @@ public class Main {
 
             }
             // if your on the first page, you can select these options
-            if(page) {
+            if (page) {
                 switch (choice) {
                     case 1:
                         System.out.print("Enter a  minimum distance: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -405,7 +412,7 @@ public class Main {
                     case 2:
                         System.out.println("Enter a minimum duration: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -427,9 +434,10 @@ public class Main {
                         break;
                 }
             }
-        }while(!exit);
+        } while (!exit);
 
     }
+
     public static String displaySessionsMenu(boolean whichPage) {
 
         StringBuilder selectedPage = new StringBuilder();
@@ -479,7 +487,6 @@ public class Main {
     }
 
 
-
     // ----------- Running -----------
     public static void RunningInterface(ArrayList<ActivityEntry> e) {
         Scanner kb = new Scanner(System.in);
@@ -501,8 +508,8 @@ public class Main {
             int choice = kb.nextInt();
 
             // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
+            if (!page) {
+                switch (choice) {
                     case 1:
                         displaySessions(runningSessions);
                         break;
@@ -515,7 +522,7 @@ public class Main {
                         displaySessions(runningSessions);
                         break;
                     case 4:
-                        displayByDistance(runningSessions,selectOrder());
+                        displayByDistance(runningSessions, selectOrder());
                         break;
                     case 5:
                         Collections.sort(runningSessions, new HeartRateComparator());
@@ -534,12 +541,12 @@ public class Main {
             }
 
             // if your on the first page, you can select these options
-            if(page) {
+            if (page) {
                 switch (choice) {
                     case 1:
                         System.out.print("Enter a  minimum distance: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -551,7 +558,7 @@ public class Main {
                     case 2:
                         System.out.println("Enter a minimum duration: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -574,8 +581,9 @@ public class Main {
                         break;
                 }
             }
-        }while(!exit);
+        } while (!exit);
     }
+
     public static String displayRunningMenu(boolean whichPage) {
 
         StringBuilder selectedPage = new StringBuilder();
@@ -635,8 +643,8 @@ public class Main {
             int choice = kb.nextInt();
 
             // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
+            if (!page) {
+                switch (choice) {
                     case 1:
                         displaySessions(swimmingSessions);
                         break;
@@ -649,7 +657,7 @@ public class Main {
                         displaySessions(swimmingSessions);
                         break;
                     case 4:
-                        displayByDistance(swimmingSessions,selectOrder());
+                        displayByDistance(swimmingSessions, selectOrder());
                         break;
                     case 5:
                         Collections.sort(swimmingSessions, new HeartRateComparator());
@@ -668,24 +676,24 @@ public class Main {
             }
 
             // if your on the first page, you can select these options
-            if(page) {
+            if (page) {
                 switch (choice) {
                     case 1:
-                    System.out.print("Enter a  maximum distance: ");
-                    // if the next input is not a number or less than one - enter loop
-                    while(!kb.hasNextInt()) {
-                        System.out.println("Invalid input, enter a number > 0");
-                        kb.next(); // consume invalid input
-                    }
-                    duration = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(swimmingSessions,
-                            duration));
+                        System.out.print("Enter a  maximum distance: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while (!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        duration = kb.nextInt();
+                        displaySessions(filterByMinimumDistance(swimmingSessions,
+                                duration));
 
-                    break;
+                        break;
                     case 2:
                         System.out.println("Enter a minimum duration: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -707,8 +715,9 @@ public class Main {
                         break;
                 }
             }
-        }while(!exit);
+        } while (!exit);
     }
+
     public static String displaySwimmingMenu(boolean whichPage) {
         StringBuilder selectedPage = new StringBuilder();
 
@@ -767,19 +776,19 @@ public class Main {
 
             // Deal with important inputs first
             //
-            if(choice == -1) // move to the second page
+            if (choice == -1) // move to the second page
                 page = true;
-            if(!page && choice == 0) // only works when on page 1:2 | Exits Swimming menu
+            if (!page && choice == 0) // only works when on page 1:2 | Exits Swimming menu
                 exit = true;
-            if(page && choice == 0) // if your on the second page accept the controls from the second page
+            if (page && choice == 0) // if your on the second page accept the controls from the second page
             {
                 page = false;
                 exit = false;
             }
 
             // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
+            if (!page) {
+                switch (choice) {
                     case 1:
                         displaySessions(cyclingSessions);
                         break;
@@ -792,7 +801,7 @@ public class Main {
                         displaySessions(cyclingSessions);
                         break;
                     case 4:
-                        displayByDistance(cyclingSessions,selectOrder());
+                        displayByDistance(cyclingSessions, selectOrder());
                         break;
                     case 5:
                         Collections.sort(cyclingSessions, new HeartRateComparator());
@@ -811,24 +820,24 @@ public class Main {
             }
 
             // if your on the first page, you can select these options
-            if(page) {
+            if (page) {
                 switch (choice) {
                     case 1:
-                    System.out.print("Enter a  maximum distance: ");
-                    // if the next input is not a number or less than one - enter loop
-                    while(!kb.hasNextInt()) {
-                        System.out.println("Invalid input, enter a number > 0");
-                        kb.next(); // consume invalid input
-                    }
-                    duration = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(cyclingSessions,
-                            duration));
+                        System.out.print("Enter a  maximum distance: ");
+                        // if the next input is not a number or less than one - enter loop
+                        while (!kb.hasNextInt()) {
+                            System.out.println("Invalid input, enter a number > 0");
+                            kb.next(); // consume invalid input
+                        }
+                        duration = kb.nextInt();
+                        displaySessions(filterByMinimumDistance(cyclingSessions,
+                                duration));
 
-                    break;
+                        break;
                     case 2:
                         System.out.println("Enter a minimum duration: ");
                         // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
+                        while (!kb.hasNextInt()) {
                             System.out.println("Invalid input, enter a number > 0");
                             kb.next(); // consume invalid input
                         }
@@ -840,7 +849,7 @@ public class Main {
                         displayByCaloriesBurned(cyclingSessions);
                         break;
                     case 4:
-                       // TODO Method to show the energy expended for each activity in a subset
+                        // TODO Method to show the energy expended for each activity in a subset
                         break;
                     case 0:
                         page = false; // return to previous page
@@ -852,6 +861,7 @@ public class Main {
             }
         } while (!exit);
     }
+
     public static String displayCyclingMenu(boolean whichPage) {
         StringBuilder selectedPage = new StringBuilder();
 
@@ -888,40 +898,78 @@ public class Main {
     }
 
 
+    //binary search with string return if object from parameter has a match
+    public static String searchBinary(ArrayList<ActivityEntry> list, ActivityEntry toFind) {
+        Collections.sort(list);
+        int index = binarySearch(list, toFind);
+        if (index != 0)
+            return "An activity with these parameters was found at index " + index;
+        else
+            return "No activity was found with these parameters.";
+    }
 
+    //Method to take input from user and create object for binary search
+    public static ActivityEntry getUserParameters() {
+        boolean inputValid = true;
+        ActivityEntry e = new Running();
+        do {
+            inputValid = true;
+            Scanner input = new Scanner(System.in);
+            System.out.println("Enter Activity Type:");
+            String type = input.next();
+            System.out.println("Enter Distance :");
+            double distance = input.nextDouble();
+            System.out.println("Enter HeartRate Type:");
+            int heartRate = input.nextInt();
+            System.out.println("Enter Date:");
+            String date = input.next();
 
+            if (type.equals("Running")) {
+                e = new Running(date, distance, heartRate, 0);
+            } else if (type.equals("Swimming")) {
+                e =  new Swimming(date, distance, heartRate, 0);
+            } else if (type.equals("Cycling")) {
+                e = new Cycling(date, distance, heartRate, 0);
+            } else {
+                System.out.println("Invalid activity type");
+                inputValid = false;
+            }
+        } while(!inputValid);
+        return e;
+    }
 
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
-        double runningTotal =0;
+        double runningTotal = 0;
         double cyclingTotal = 0;
         double swimmingTotal = 0;
         int runningCount = 0;
         int cyclingCount = 0;
         int swimmingCount = 0;
         for (ActivityEntry e : records) {
-            if (e.getActivityType().equals("Running")){
+            if (e.getActivityType().equals("Running")) {
                 runningCount++;
                 runningTotal += e.getDistance();
-            }else if (e.getActivityType().equals("Swimming")) {
+            } else if (e.getActivityType().equals("Swimming")) {
                 swimmingCount++;
                 swimmingTotal += e.getDistance();
             } else {
                 cyclingCount++;
-                cyclingTotal +=  e.getDistance();
+                cyclingTotal += e.getDistance();
             }
         }
-        runningAvg = runningTotal/runningCount;
-        swimmingAvg = swimmingTotal/swimmingCount;
-        cyclingAvg = cyclingTotal/cyclingCount;
-        double[] avgs = {runningAvg,swimmingAvg,cyclingAvg};
+        runningAvg = runningTotal / runningCount;
+        swimmingAvg = swimmingTotal / swimmingCount;
+        cyclingAvg = cyclingTotal / cyclingCount;
+        double[] avgs = {runningAvg, swimmingAvg, cyclingAvg};
         return avgs;
     }
-    public static void displayAverageDistancesPerActivity(double[] avgs){
+
+    public static void displayAverageDistancesPerActivity(double[] avgs) {
         System.out.printf("|        AVERAGES                |\n");
-        System.out.printf("|    Running  : %.2f             |\n",avgs[0]);
-        System.out.printf("|    Swimming : %.2f             |\n",avgs[1]);
-        System.out.printf("|    Cycling  : %.2f            |\n",avgs[2]);
+        System.out.printf("|    Running  : %.2f             |\n", avgs[0]);
+        System.out.printf("|    Swimming : %.2f             |\n", avgs[1]);
+        System.out.printf("|    Cycling  : %.2f            |\n", avgs[2]);
         System.out.printf("+ ----------------------------- +\n");
 
     }
