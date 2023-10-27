@@ -3,7 +3,10 @@ public class Running extends ActivityEntry {
     final private INTENSITY intensity = getIntensityValue();
 
     public Running(String date, double distance, int heartRate, int duration) {
-        super("Running", date,distance,heartRate,duration);
+        super(date,distance,heartRate,duration);
+    }
+    public Running() {
+        super();
     }
 
     public ActivityEntry.INTENSITY getIntensityValue() {
@@ -33,6 +36,10 @@ public class Running extends ActivityEntry {
             return 15.4 * getDuration();
         else
             return 20.8 * getDuration();
+    }
+
+    public String getActivityType(){
+        return "Running";
     }
 
 

@@ -3,6 +3,10 @@ public class Cycling extends ActivityEntry{
 
     final private INTENSITY intensity = getIntensityValue();
 
+    public Cycling() {
+        super();
+    }
+
 
     public ActivityEntry.INTENSITY getIntensityValue() {
         double kmph = this.getDistance()/((double) this.getDuration() /60);
@@ -33,8 +37,12 @@ public class Cycling extends ActivityEntry{
 
 
     public Cycling(String date, double distance, int heartRate, int duration) {
-        super("Cycling",date,distance,heartRate,duration);
+        super(date,distance,heartRate,duration);
 
+    }
+
+    public String getActivityType(){
+        return "Cycling";
     }
 
     @Override
