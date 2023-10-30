@@ -14,6 +14,9 @@ public class Main {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
         loadCSV(records, fileName);
+        Collections.sort(records);
+        displaySessions(records);
+        System.out.println(searchBinary(records,getUserParameters()));
 
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
