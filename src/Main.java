@@ -12,7 +12,7 @@ import static java.util.Collections.binarySearch;
 public class Main {
     public static void main(String[] args) throws IOException {
         ArrayList<ActivityEntry> records = new ArrayList<>();
-        String fileName = "sampleCSV.csv";
+        String fileName = "activity_data_100.csv";
 
         loadCSV(records,fileName);
         Scanner kb = new Scanner(System.in);
@@ -78,7 +78,9 @@ public class Main {
             line = input.nextLine();
             if (line != "") {
                 ActivityEntry entry = parseLine(line);
-                records.add(entry);
+                if (entry != null) {
+                    records.add(entry);
+                }
             }
         }
         //removing any duplicate entries
@@ -86,29 +88,29 @@ public class Main {
     }
 
     private static ActivityEntry parseLine(String line) {
-        // To set default value to invalid in-case of entry not including (swimming,running,cycling)
-        String date;
-        int duration;
-        double distance;
-        int heartRate;
+        String date="";
+        int duration=0;
+        double distance=0;
+        int heartRate=0;
         StringTokenizer st = new StringTokenizer(line, ",");
         String activityString = st.nextToken().trim();
-        date = st.nextToken().trim();
-
-        duration = Integer.parseInt(st.nextToken().trim());
-        distance = Double.parseDouble(st.nextToken().trim());
-        heartRate = Integer.parseInt(st.nextToken().trim());
-
         ActivityEntry e;
+        if(activityString.equals("Running") || activityString.equals("Cycling") || activityString.equals("Swimming")) {
+            date = st.nextToken().trim();
+            duration = Integer.parseInt(st.nextToken().trim());
+            distance = Double.parseDouble(st.nextToken().trim());
+            heartRate = Integer.parseInt(st.nextToken().trim());
 
-        if (activityString.equals("Running")) {
-            e = new Running(date, distance, heartRate, duration);
-        } else if (activityString.equals("Swimming")) {
-            e = new Swimming(date, distance, heartRate, duration);
-        } else {
-            e = new Cycling(date, distance, heartRate, duration);
+            if (activityString.equals("Running")) {
+                e = new Running(date, distance, heartRate, duration);
+            } else if (activityString.equals("Swimming")) {
+                e = new Swimming(date, distance, heartRate, duration);
+            } else {
+                e = new Cycling(date, distance, heartRate, duration);
+            }
+            return e;
         }
-        return e;
+        return null;
     }
 
     // Iterates through the records array to check for duplicates using Overrode version of .equals
