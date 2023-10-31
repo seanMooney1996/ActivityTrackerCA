@@ -150,7 +150,8 @@ public class Main {
                 "Above duration X",
                 "Calories Burned",
                 "Energy Expended Type",
-                "Average Distances"};
+                "Average Distances",
+                "Average Calories"};
 
         Menu sessionMenu = new Menu(sessionsMenuItems, "All Activities");
         do{
@@ -207,6 +208,9 @@ public class Main {
                     break;
                 case 11:
                     displayAverageDistancesPerActivity(getAverageDistances(e));
+                    break;
+                case 12:
+                    displayAverageDistancesPerActivity(getAverageCalories(e));
                     break;
                 case 0:
                     exit = true; // exit this menu
@@ -698,6 +702,32 @@ public class Main {
             } else {
                 cyclingCount++;
                 cyclingTotal += e.getDistance();
+            }
+        }
+        runningAvg = runningTotal / runningCount;
+        swimmingAvg = swimmingTotal / swimmingCount;
+        cyclingAvg = cyclingTotal / cyclingCount;
+        double[] avgs = {runningAvg, swimmingAvg, cyclingAvg};
+        return avgs;
+    }
+    public static double[] getAverageCalories(ArrayList<ActivityEntry> records) {
+        double runningAvg, cyclingAvg, swimmingAvg;
+        double runningTotal = 0;
+        double cyclingTotal = 0;
+        double swimmingTotal = 0;
+        int runningCount = 0;
+        int cyclingCount = 0;
+        int swimmingCount = 0;
+        for (ActivityEntry e : records) {
+            if (e.getActivityType().equals("Running")) {
+                runningCount++;
+                runningTotal += e.getCaloriesBurned();
+            } else if (e.getActivityType().equals("Swimming")) {
+                swimmingCount++;
+                swimmingTotal += e.getCaloriesBurned();
+            } else {
+                cyclingCount++;
+                cyclingTotal += e.getCaloriesBurned();
             }
         }
         runningAvg = runningTotal / runningCount;
