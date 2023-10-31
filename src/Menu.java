@@ -17,7 +17,6 @@ public class Menu {
 
         // Display the menu header
         System.out.printf("|\t\t\t  %-34s |\n", this.menuHeader);
-
         System.out.println("|\t\t\t                                     |");
 
         // Display the options
@@ -62,7 +61,7 @@ public class Menu {
         System.out.println("+ ----------------------------- +");
     }
 
-    public static boolean selectOrder(){
+    public static boolean selectOrder() {
         Scanner kb = new Scanner(System.in);
         System.out.println("+ ------- Select Order ------- +");
         System.out.println("|                              |");

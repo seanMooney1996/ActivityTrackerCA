@@ -563,7 +563,16 @@ public class Main {
         return filtered;
     }
 
+    // ----------- Displays as a table -----------
+    public static void displaySessions(ArrayList<ActivityEntry> entries) {
+        System.out.println("+================================\t\t Sessions\t\t=======================================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
 
+        for(ActivityEntry e : entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
+        }
+        System.out.println("+==============================================================================================+");
+    }
 
     // ----------- Uses lambda function -----------
     public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
@@ -607,18 +616,6 @@ public class Main {
         });
         displaySessions(records);
     }
-
-    // ----------- Displays as a table -----------
-    public static void displaySessions(ArrayList<ActivityEntry> entries) {
-        System.out.println("+================================\t\t Sessions\t\t=======================================+");
-        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
-
-        for(ActivityEntry e : entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
-        }
-        System.out.println("+==============================================================================================+");
-    }
-
     public static void displayByActivity(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
@@ -628,6 +625,7 @@ public class Main {
         });
         displaySessions(records);
     }
+
 
     // ----------- NOT USED YET -----------
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
