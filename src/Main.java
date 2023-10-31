@@ -202,7 +202,7 @@ public class Main {
                     displayByCaloriesBurned(e);
                     break;
                 case 10:
-                    // TODO ENERGY EXPENDED
+                    displayEnergyExpended(filterByEnergyExpended(e, Menu.selectIntensityValue()));
                     break;
                 case 0:
                     exit = true; // exit this menu
@@ -235,8 +235,7 @@ public class Main {
                 "By Heart Rate",
                 "Above distance X",
                 "Above duration X",
-                "Calories Burned",
-                "Energy Expended Type"};
+                "Calories Burned"};
 
         Menu sessionMenu = new Menu(runningMenuItems, "Running");
         do{
@@ -287,9 +286,6 @@ public class Main {
                 case 8:
                     displayByCaloriesBurned(runningEntries);
                     break;
-                case 9:
-                    // TODO ENERGY EXPENDED
-                    break;
                 case 0:
                     exit = true; // exit this menu
                     break;
@@ -317,8 +313,7 @@ public class Main {
                 "By Heart Rate",
                 "Above distance X",
                 "Above duration X",
-                "Calories Burned",
-                "Energy Expended Type"};
+                "Calories Burned"};
 
         Menu sessionMenu = new Menu(swimmingMenuItems, "Swimming");
         do{
@@ -368,9 +363,6 @@ public class Main {
                 case 8:
                     displayByCaloriesBurned(swimmingEntries);
                     break;
-                case 9:
-                    // TODO ENERGY EXPENDED
-                    break;
                 case 0:
                     exit = true; // exit this menu
                     break;
@@ -398,8 +390,7 @@ public class Main {
                 "By Heart Rate",
                 "Above distance X",
                 "Above duration X",
-                "Calories Burned",
-                "Energy Expended Type"};
+                "Calories Burned"};
 
         Menu sessionMenu = new Menu(cyclingMenuItems, "Cycling");
         do{
@@ -448,9 +439,6 @@ public class Main {
                     break;
                 case 8:
                     displayByCaloriesBurned(cyclingEntries);
-                    break;
-                case 9:
-                    // TODO ENERGY EXPENDED
                     break;
                 case 0:
                     exit = true; // exit this menu
@@ -570,7 +558,8 @@ public class Main {
     public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
-            if (entries.getIntensityValue().toString().equalsIgnoreCase(intensityString)) {
+            if (entries.getIntensityValue().name().equals(intensityString)) {
+                System.out.println("11"+entries.getIntensityValue());
                 filtered.add(entries);
             }
         }
@@ -638,6 +627,16 @@ public class Main {
             }
         });
         displaySessions(records);
+    }
+
+    public static void displayEnergyExpended(ArrayList<ActivityEntry> entries) {
+        System.out.println("+================================\t\t Sessions\t\t=======================================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Intensity Value\t   |");
+
+        for (ActivityEntry e : entries) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14s|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getIntensityValue().name());
+        }
+        System.out.println("+==============================================================================================+");
     }
 
 
@@ -712,4 +711,5 @@ public class Main {
         System.out.printf("+ ----------------------------- +\n");
 
     }
+
 }
