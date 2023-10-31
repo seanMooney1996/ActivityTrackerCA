@@ -149,7 +149,8 @@ public class Main {
                 "Above distance X",
                 "Above duration X",
                 "Calories Burned",
-                "Energy Expended Type"};
+                "Energy Expended Type",
+                "Average Distances"};
 
         Menu sessionMenu = new Menu(sessionsMenuItems, "All Activities");
         do{
@@ -203,6 +204,9 @@ public class Main {
                     break;
                 case 10:
                     displayEnergyExpended(filterByEnergyExpended(e, Menu.selectIntensityValue()));
+                    break;
+                case 11:
+                    displayAverageDistancesPerActivity(getAverageDistances(e));
                     break;
                 case 0:
                     exit = true; // exit this menu
@@ -707,7 +711,7 @@ public class Main {
         System.out.printf("|        AVERAGES                |\n");
         System.out.printf("|    Running  : %.2f             |\n", avgs[0]);
         System.out.printf("|    Swimming : %.2f             |\n", avgs[1]);
-        System.out.printf("|    Cycling  : %.2f            |\n", avgs[2]);
+        System.out.printf("|    Cycling  : %.2f             |\n", avgs[2]);
         System.out.printf("+ ----------------------------- +\n");
 
     }
