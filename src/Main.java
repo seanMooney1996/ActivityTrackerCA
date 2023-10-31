@@ -13,6 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
+
         loadCSV(records,fileName);
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
@@ -643,8 +644,8 @@ public class Main {
     public static String searchBinary(ArrayList<ActivityEntry> list, ActivityEntry toFind) {
         Collections.sort(list);
         int index = binarySearch(list, toFind);
-        if (index != 0)
-            return "An activity with these parameters was found at index " + index;
+        if (index != -1)
+            return "Found "+list.get(index).toString()+" at index"+index+".";
         else
             return "No activity was found with these parameters.";
     }
@@ -658,19 +659,15 @@ public class Main {
             Scanner input = new Scanner(System.in);
             System.out.println("Enter Activity Type:");
             String type = input.next();
-            System.out.println("Enter Distance :");
-            double distance = input.nextDouble();
-            System.out.println("Enter HeartRate Type:");
-            int heartRate = input.nextInt();
-            System.out.println("Enter Date:");
+            System.out.println("Enter Date: dd/mm/yy");
             String date = input.next();
 
-            if (type.equals("Running")) {
-                e = new Running(date, distance, heartRate, 0);
-            } else if (type.equals("Swimming")) {
-                e =  new Swimming(date, distance, heartRate, 0);
-            } else if (type.equals("Cycling")) {
-                e = new Cycling(date, distance, heartRate, 0);
+            if (type.equalsIgnoreCase("Running")) {
+                e = new Running(date);
+            } else if (type.equalsIgnoreCase("Swimming")) {
+                e =  new Swimming(date);
+            } else if (type.equalsIgnoreCase("Cycling")) {
+                e = new Cycling(date);
             } else {
                 System.out.println("Invalid activity type");
                 inputValid = false;
@@ -714,6 +711,5 @@ public class Main {
         System.out.printf("+ ----------------------------- +\n");
 
     }
-
 
 }
