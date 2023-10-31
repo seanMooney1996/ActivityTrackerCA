@@ -11,31 +11,27 @@ public class Menu {
     }
 
     public void display() {
-        int headerLength = this.menuHeader.length();
-        int totalLength = 45; // Total length of the border
 
-        // Calculate the remaining length
-        int remaining = totalLength - headerLength;
+    // Display the top row with '+' symbols
+        System.out.println("+ ---------------------------------------------- +");
 
-        // Print the top border
-        System.out.print("+ ");
-        for(int i = 0; i < remaining / 2; i++) {
-            System.out.print("-");
-        }
-        System.out.print(" " + this.menuHeader + " ");
-        for(int i = 0; i < remaining / 2; i++) {
-            System.out.print("-");
-        }
-        System.out.println(" +");
+        // Display the menu header
+        System.out.printf("|\t\t\t  %-34s |\n", this.menuHeader);
 
+        System.out.println("|\t\t\t                                     |");
 
+        // Display the options
         for (int i = 0; i < options.length; i++) {
             System.out.printf("|\t\t\t  %-2d. %-30s |\n", (i + 1), options[i]);
         }
 
+        // Display the exit option
         System.out.println("|\t\t\t                                     |");
         System.out.println("|\t\t\t  0. Exit                            |");
+
+        // Display the bottom row with '+' symbols
         System.out.println("+ ---------------------------------------------- +");
+
     }
 
     public int getChoice() {

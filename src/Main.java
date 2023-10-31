@@ -10,11 +10,9 @@ public class Main {
         ArrayList<ActivityEntry> records = new ArrayList<>();
         String fileName = "sampleCSV.csv";
         loadCSV(records,fileName);
-
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
-
-        int choice = 0;
+        int choice;
 
         String[] mainMenuOptions = {
                 "All Sessions",
@@ -23,6 +21,7 @@ public class Main {
                 "Add New Activity",
         };
 
+        // instantiate a new Menu object
         Menu mainMenu = new Menu(mainMenuOptions, "Activity Tracker");
 
         do{
@@ -172,7 +171,7 @@ public class Main {
                     displayByDistance(e, Menu.selectOrder());
                     break;
                 case 6:
-                    Collections.sort(e, new HeartRateComparator());
+                    Collections.sort(e, new HeartRateComparator(Menu.selectOrder()));
                     displaySessions(e);
                     break;
                 case 7:
@@ -182,8 +181,8 @@ public class Main {
                         System.out.println("Invalid input, enter a number > 0");
                         kb.next(); // consume invalid input
                     }
-                    distance = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(e, duration));
+                    distance = kb.nextDouble();
+                    displaySessions(filterByMinimumDistance(e, distance));
                     break;
                 case 8:
                     System.out.println("Enter a minimum duration: ");
@@ -192,7 +191,7 @@ public class Main {
                         System.out.println("Invalid input, enter a number > 0");
                         kb.next(); // consume invalid input
                     }
-                    distance = kb.nextDouble();
+                    duration = kb.nextInt();
                     displaySessions(filterByMinimumDuration(e, duration));
                     break;
                 case 9:
@@ -221,9 +220,11 @@ public class Main {
         int duration = 0;
         double distance = 0.0;
 
-        String[] sessionsMenuItems = {
+        // filter original ArrayList to all running entries
+
+
+        String[] runningMenuItems = {
                 "Display all",
-                "By Activity",
                 "By Date",
                 "By Duration",
                 "By Distance",
@@ -233,34 +234,33 @@ public class Main {
                 "Calories Burned",
                 "Energy Expended Type"};
 
-        Menu sessionMenu = new Menu(sessionsMenuItems, "Running");
+        Menu sessionMenu = new Menu(runningMenuItems, "Running");
         do{
+            ArrayList<ActivityEntry> runningEntries = filterActivities(e, "Running");
             sessionMenu.display();
 
             choice = sessionMenu.getChoice();
 
             switch (choice){
                 case 1:
-                    displaySessions(e);
+                    displaySessions(runningEntries);
                     break;
                 case 2:
-                    displayByActivity(e);
+                    Collections.sort(runningEntries, new DateComparator(Menu.selectOrder()));
+                    displaySessions(runningEntries);
                     break;
                 case 3:
-                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
-                    displaySessions(e);
+                    Collections.sort(runningEntries, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(runningEntries);
                     break;
                 case 4:
-                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
-                    displaySessions(e);
+                    displayByDistance(runningEntries, Menu.selectOrder());
+                    break;
                 case 5:
-                    displayByDistance(e, Menu.selectOrder());
+                    Collections.sort(runningEntries, new HeartRateComparator(Menu.selectOrder()));
+                    displaySessions(runningEntries);
                     break;
                 case 6:
-                    Collections.sort(e, new HeartRateComparator());
-                    displaySessions(e);
-                    break;
-                case 7:
                     System.out.print("Enter a  minimum distance: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -268,9 +268,9 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     distance = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(e, distance));
+                    displaySessions(filterByMinimumDistance(runningEntries, distance));
                     break;
-                case 8:
+                case 7:
                     System.out.println("Enter a minimum duration: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -278,19 +278,19 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     duration = kb.nextInt();
-                    displaySessions(filterByMinimumDuration(e, duration));
+                    displaySessions(filterByMinimumDuration(runningEntries, duration));
+                    break;
+                case 8:
+                    displayByCaloriesBurned(runningEntries);
                     break;
                 case 9:
-                    displayByCaloriesBurned(e);
-                    break;
-                case 10:
                     // TODO ENERGY EXPENDED
                     break;
                 case 0:
                     exit = true; // exit this menu
                     break;
                 default:
-                    System.out.println("Select from one of the menu options 0 -> 3");
+                    System.out.println("Select from one of the menu options 0 -> " + runningMenuItems.length);
                     break;
             }
 
@@ -305,9 +305,8 @@ public class Main {
         int duration = 0;
         double distance = 0.0;
 
-        String[] sessionsMenuItems = {
+        String[] swimmingMenuItems = {
                 "Display all",
-                "By Activity",
                 "By Date",
                 "By Duration",
                 "By Distance",
@@ -317,34 +316,32 @@ public class Main {
                 "Calories Burned",
                 "Energy Expended Type"};
 
-        Menu sessionMenu = new Menu(sessionsMenuItems, "Swimming");
+        Menu sessionMenu = new Menu(swimmingMenuItems, "Swimming");
         do{
+            ArrayList<ActivityEntry> swimmingEntries = filterActivities(e, "Swimming");
             sessionMenu.display();
 
             choice = sessionMenu.getChoice();
 
             switch (choice){
                 case 1:
-                    displaySessions(e);
+                    displaySessions(swimmingEntries);
                     break;
                 case 2:
-                    displayByActivity(e);
+                    Collections.sort(swimmingEntries, new DateComparator(Menu.selectOrder()));
+                    displaySessions(swimmingEntries);
                     break;
                 case 3:
-                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
-                    displaySessions(e);
-                    break;
+                    Collections.sort(swimmingEntries, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(swimmingEntries);
                 case 4:
-                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
-                    displaySessions(e);
+                    displayByDistance(swimmingEntries, Menu.selectOrder());
+                    break;
                 case 5:
-                    displayByDistance(e, Menu.selectOrder());
+                    Collections.sort(swimmingEntries, new HeartRateComparator(Menu.selectOrder()));
+                    displaySessions(swimmingEntries);
                     break;
                 case 6:
-                    Collections.sort(e, new HeartRateComparator());
-                    displaySessions(e);
-                    break;
-                case 7:
                     System.out.print("Enter a  minimum distance: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -352,9 +349,9 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     distance = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(e, distance));
+                    displaySessions(filterByMinimumDistance(swimmingEntries, distance));
                     break;
-                case 8:
+                case 7:
                     System.out.println("Enter a minimum duration: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -362,19 +359,19 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     duration = kb.nextInt();
-                    displaySessions(filterByMinimumDuration(e, duration));
+                    displaySessions(filterByMinimumDuration(swimmingEntries, duration));
+                    break;
+                case 8:
+                    displayByCaloriesBurned(swimmingEntries);
                     break;
                 case 9:
-                    displayByCaloriesBurned(e);
-                    break;
-                case 10:
                     // TODO ENERGY EXPENDED
                     break;
                 case 0:
                     exit = true; // exit this menu
                     break;
                 default:
-                    System.out.println("Select from one of the menu options 0 -> 3");
+                    System.out.println("Select from one of the menu options 0 -> " + swimmingMenuItems.length);
                     break;
             }
 
@@ -389,9 +386,8 @@ public class Main {
         int duration = 0;
         double distance = 0.0;
 
-        String[] sessionsMenuItems = {
+        String[] cyclingMenuItems = {
                 "Display all",
-                "By Activity",
                 "By Date",
                 "By Duration",
                 "By Distance",
@@ -401,34 +397,32 @@ public class Main {
                 "Calories Burned",
                 "Energy Expended Type"};
 
-        Menu sessionMenu = new Menu(sessionsMenuItems, "Cycling");
+        Menu sessionMenu = new Menu(cyclingMenuItems, "Cycling");
         do{
+            ArrayList<ActivityEntry> cyclingEntries = filterActivities(e, "Cycling");
             sessionMenu.display();
 
             choice = sessionMenu.getChoice();
 
             switch (choice){
                 case 1:
-                    displaySessions(e);
+                    displaySessions(cyclingEntries);
                     break;
                 case 2:
-                    displayByActivity(e);
+                    Collections.sort(cyclingEntries, new DateComparator(Menu.selectOrder()));
+                    displaySessions(cyclingEntries);
                     break;
                 case 3:
-                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
-                    displaySessions(e);
-                    break;
+                    Collections.sort(cyclingEntries, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(cyclingEntries);
                 case 4:
-                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
-                    displaySessions(e);
+                    displayByDistance(cyclingEntries, Menu.selectOrder());
+                    break;
                 case 5:
-                    displayByDistance(e, Menu.selectOrder());
+                    Collections.sort(cyclingEntries, new HeartRateComparator(Menu.selectOrder()));
+                    displaySessions(cyclingEntries);
                     break;
                 case 6:
-                    Collections.sort(e, new HeartRateComparator());
-                    displaySessions(e);
-                    break;
-                case 7:
                     System.out.print("Enter a  minimum distance: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -436,9 +430,9 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     distance = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(e, distance));
+                    displaySessions(filterByMinimumDistance(cyclingEntries, distance));
                     break;
-                case 8:
+                case 7:
                     System.out.println("Enter a minimum duration: ");
                     // if the next input is not a number or less than one - enter loop
                     while(!kb.hasNextInt()) {
@@ -446,19 +440,19 @@ public class Main {
                         kb.next(); // consume invalid input
                     }
                     duration = kb.nextInt();
-                    displaySessions(filterByMinimumDuration(e, duration));
+                    displaySessions(filterByMinimumDuration(cyclingEntries, duration));
+                    break;
+                case 8:
+                    displayByCaloriesBurned(cyclingEntries);
                     break;
                 case 9:
-                    displayByCaloriesBurned(e);
-                    break;
-                case 10:
                     // TODO ENERGY EXPENDED
                     break;
                 case 0:
                     exit = true; // exit this menu
                     break;
                 default:
-                    System.out.println("Select from one of the menu options 0 -> 3");
+                    System.out.println("Select from one of the menu options 0 -> " + cyclingMenuItems.length);
                     break;
             }
 
@@ -539,7 +533,7 @@ public class Main {
     }
 
 
-    // ----------- Filters the ArrayList to user requirements
+    // ----------- Filters the ArrayList to user requirements -----------
     public static ArrayList<ActivityEntry> filterActivities(ArrayList<ActivityEntry> e, String requestedType) {
         ArrayList<ActivityEntry> filterByActivities = new ArrayList<>();
 
@@ -568,15 +562,7 @@ public class Main {
         }
         return filtered;
     }
-    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
-        ArrayList<ActivityEntry> filtered = new ArrayList<>();
-        for (ActivityEntry entries : e) {
-            if (entries.getIntensityValue().toString().equalsIgnoreCase(intensityString)) {
-                filtered.add(entries);
-            }
-        }
-        return filtered;
-    }
+
 
 
     // ----------- Uses lambda function -----------
@@ -643,7 +629,7 @@ public class Main {
         displaySessions(records);
     }
 
-
+    // ----------- NOT USED YET -----------
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
         double runningAvg, cyclingAvg, swimmingAvg;
         double runningTotal =0;
@@ -677,6 +663,15 @@ public class Main {
         System.out.printf("|    Cycling  : %.2f            |\n",avgs[2]);
         System.out.printf("+ ----------------------------- +\n");
 
+    }
+    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (entries.getIntensityValue().toString().equalsIgnoreCase(intensityString)) {
+                filtered.add(entries);
+            }
+        }
+        return filtered;
     }
 
 }

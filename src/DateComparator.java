@@ -9,6 +9,7 @@ public class DateComparator implements Comparator<ActivityEntry>{
     public DateComparator(boolean ascending) {
         this.ascending = ascending;
     }
+
     @Override
     public int compare(ActivityEntry entry1, ActivityEntry entry2) {
         Date date1;
