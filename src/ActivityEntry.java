@@ -1,5 +1,5 @@
 public abstract class ActivityEntry implements Comparable<ActivityEntry> {
-    public static enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
+    public enum INTENSITY {VERYLIGHT, LIGHT, MODERATE, VIGOROUS, VERYVIGOROUS,DEFAULT};
 
     private String date;
     private double distance;
