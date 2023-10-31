@@ -81,4 +81,46 @@ public class Menu {
             return false; // Descending
     }
 
+    public static String selectIntensityValue() {
+        Scanner kb = new Scanner(System.in);
+        String intensityType = "";
+        System.out.println("+ ----- Select Intensity ----- +");
+        System.out.println("|                              |");
+        System.out.println("|         1. Very Light        |");
+        System.out.println("|         2. Light             |");
+        System.out.println("|         3. Moderate          |");
+        System.out.println("|         4. Vigorous          |");
+        System.out.println("|         5. Very Vigorous     |");
+        System.out.println("|                              |");
+        System.out.println("+ ---------------------------- +");
+
+        while (!kb.hasNextInt()) {
+            System.out.println("Select from 1-5 from the menu.");
+            kb.next(); // Consume invalid input
+        }
+
+        int choice = kb.nextInt();
+        switch(choice) {
+            case 1:
+                intensityType = "VERYLIGHT";
+                break;
+            case 2:
+                intensityType = "LIGHT";
+                break;
+            case 3:
+                intensityType = "MODERATE";
+                break;
+            case 4:
+                intensityType = "VIGOROUS";
+                break;
+            case 5:
+                intensityType = "VERYVIGOROUS";
+                break;
+            default:
+                System.out.println("Select from 1-5 from the menu.");
+                break;
+        }
+        return intensityType;
+    }
+
 }
