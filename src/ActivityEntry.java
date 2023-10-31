@@ -15,6 +15,12 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
         this.heartRate = heartRate;
         this.duration = duration;
     }
+    public ActivityEntry(String date) {
+        this.date = date;
+        this.distance = 0;
+        this.heartRate = 0;
+        this.duration = 0;
+    }
 
     public abstract String getActivityType();
 
@@ -77,30 +83,21 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
     // natural ordering checks --->  distance/heartRate/date/activityType
 
     @Override
-    public int compareTo(ActivityEntry e){
+    public int compareTo(ActivityEntry e) {
         DateComparator d = new DateComparator(true);
-        if (this.distance > e.getDistance()) {
-            return 1;
-        } else if (this.distance < e.getDistance()) {
-            return -1;
-        } else {
-            if(this.heartRate >  e.getHeartRate()){
-                return 1;
-            } else if (this.heartRate <  e.getHeartRate()){
-                return -1;
-            } else {
-                int dateComparison = d.compare(this,e);
 
-            if (dateComparison != 0 ) {
-                return dateComparison;
-            } else {
-                return this.getActivityType().compareTo(e.getActivityType());
-            }
-            }
+        int activityTypeComparison = this.getActivityType().compareTo(e.getActivityType());
+
+        if (activityTypeComparison != 0) {
+            // If activity types are different, return the comparison result
+            return activityTypeComparison;
+        } else {
+            // If activity types are the same, compare by date
+            return d.compare(this, e);
         }
     }
 
-    @Override
+        @Override
     public String toString() {
         return "ActivityEntry{" +
                 ", date='" + date + '\'' +

@@ -10,6 +10,10 @@ public class Swimming extends ActivityEntry{
         super();
     }
 
+    public Swimming(String date) {
+        super(date);
+    }
+
 
     public double getCaloriesBurned(){
         if (intensity == INTENSITY.VERYLIGHT)
