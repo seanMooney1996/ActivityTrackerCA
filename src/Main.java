@@ -708,11 +708,13 @@ public class Main {
     }
 
     public static void displayAverageDistancesPerActivity(double[] avgs) {
-        System.out.printf("|        AVERAGES                |\n");
-        System.out.printf("|    Running  : %.2f             |\n", avgs[0]);
-        System.out.printf("|    Swimming : %.2f             |\n", avgs[1]);
-        System.out.printf("|    Cycling  : %.2f             |\n", avgs[2]);
-        System.out.printf("+ ----------------------------- +\n");
+        System.out.println("+ ------------------------------ +");
+        System.out.println("|           AVERAGES             |");
+        System.out.println("|                                |");
+        System.out.printf("|        Running  : %.2f         |\n", avgs[0]);
+        System.out.printf("|        Swimming : %.2f         |\n", avgs[1]);
+        System.out.printf("|        Cycling  : %.2f        |\n", avgs[2]);
+        System.out.println("+ ------------------------------ +");
 
     }
 
