@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -14,25 +13,31 @@ public class Main {
 
         Scanner kb = new Scanner(System.in);
         boolean exit = false;
+
         int choice = 0;
-        int activityChoice = 0;
+
+        String[] mainMenuOptions = {
+                "All Sessions",
+                "Select Activity",
+                "Individual Reports",
+                "Add New Activity",
+        };
+
+        Menu mainMenu = new Menu(mainMenuOptions, "Activity Tracker");
 
         do{
-            displayMenu();
+            mainMenu.display();
             // check if input is not a number
-            while(!kb.hasNextInt()) {
-                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-5).");
-                kb.next(); // Consume invalid input
-            }
-            choice = kb.nextInt();
+
+            choice = mainMenu.getChoice();
 
             switch(choice) {
                 case 1:
-                    SessionsInterface(records);
+                    AllActivitiesInterface(records);
                     break;
                 case 2:
-                    displaySelectActivity();
-                    activityChoice = kb.nextInt();
+                    Menu.displaySelectActivity();
+                    int activityChoice = kb.nextInt();
 
                     if (activityChoice == 1) {
                         RunningInterface(records);
@@ -121,6 +126,344 @@ public class Main {
         }
     }
 
+
+
+    // ----------- Activities -----------
+    public static void AllActivitiesInterface(ArrayList<ActivityEntry> e) {
+        Scanner kb = new Scanner(System.in);
+        boolean exit = false;
+        int choice = 0;
+        int duration = 0;
+        double distance = 0.0;
+
+        String[] sessionsMenuItems = {
+                "Display all",
+                "By Activity",
+                "By Date",
+                "By Duration",
+                "By Distance",
+                "By Heart Rate",
+                "Above distance X",
+                "Above duration X",
+                "Calories Burned",
+                "Energy Expended Type"};
+
+        Menu sessionMenu = new Menu(sessionsMenuItems, "All Activities");
+        do{
+            sessionMenu.display();
+
+            choice = sessionMenu.getChoice();
+
+            switch (choice){
+                case 1:
+                    displaySessions(e);
+                    break;
+                case 2:
+                    displayByActivity(e);
+                    break;
+                case 3:
+                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                    break;
+                case 4:
+                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                case 5:
+                    displayByDistance(e, Menu.selectOrder());
+                    break;
+                case 6:
+                    Collections.sort(e, new HeartRateComparator());
+                    displaySessions(e);
+                    break;
+                case 7:
+                    System.out.print("Enter a  minimum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    distance = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(e, duration));
+                    break;
+                case 8:
+                    System.out.println("Enter a minimum duration: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    distance = kb.nextDouble();
+                    displaySessions(filterByMinimumDuration(e, duration));
+                    break;
+                case 9:
+                    displayByCaloriesBurned(e);
+                    break;
+                case 10:
+                    // TODO ENERGY EXPENDED
+                    break;
+                case 0:
+                    exit = true; // exit this menu
+                    break;
+                default:
+                    System.out.println("Select from one of the menu options 0 -> 3");
+                    break;
+            }
+
+        }while(!exit);
+
+    }
+
+    // ----------- Running -----------
+    public static void RunningInterface(ArrayList<ActivityEntry> e) {
+        Scanner kb = new Scanner(System.in);
+        boolean exit = false;
+        int choice = 0;
+        int duration = 0;
+        double distance = 0.0;
+
+        String[] sessionsMenuItems = {
+                "Display all",
+                "By Activity",
+                "By Date",
+                "By Duration",
+                "By Distance",
+                "By Heart Rate",
+                "Above distance X",
+                "Above duration X",
+                "Calories Burned",
+                "Energy Expended Type"};
+
+        Menu sessionMenu = new Menu(sessionsMenuItems, "Running");
+        do{
+            sessionMenu.display();
+
+            choice = sessionMenu.getChoice();
+
+            switch (choice){
+                case 1:
+                    displaySessions(e);
+                    break;
+                case 2:
+                    displayByActivity(e);
+                    break;
+                case 3:
+                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                    break;
+                case 4:
+                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                case 5:
+                    displayByDistance(e, Menu.selectOrder());
+                    break;
+                case 6:
+                    Collections.sort(e, new HeartRateComparator());
+                    displaySessions(e);
+                    break;
+                case 7:
+                    System.out.print("Enter a  minimum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    distance = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(e, distance));
+                    break;
+                case 8:
+                    System.out.println("Enter a minimum duration: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    duration = kb.nextInt();
+                    displaySessions(filterByMinimumDuration(e, duration));
+                    break;
+                case 9:
+                    displayByCaloriesBurned(e);
+                    break;
+                case 10:
+                    // TODO ENERGY EXPENDED
+                    break;
+                case 0:
+                    exit = true; // exit this menu
+                    break;
+                default:
+                    System.out.println("Select from one of the menu options 0 -> 3");
+                    break;
+            }
+
+        }while(!exit);
+    }
+
+    // ----------- Swimming -----------
+    public static void SwimmingInterface(ArrayList<ActivityEntry> e) {
+        Scanner kb = new Scanner(System.in);
+        boolean exit = false;
+        int choice = 0;
+        int duration = 0;
+        double distance = 0.0;
+
+        String[] sessionsMenuItems = {
+                "Display all",
+                "By Activity",
+                "By Date",
+                "By Duration",
+                "By Distance",
+                "By Heart Rate",
+                "Above distance X",
+                "Above duration X",
+                "Calories Burned",
+                "Energy Expended Type"};
+
+        Menu sessionMenu = new Menu(sessionsMenuItems, "Swimming");
+        do{
+            sessionMenu.display();
+
+            choice = sessionMenu.getChoice();
+
+            switch (choice){
+                case 1:
+                    displaySessions(e);
+                    break;
+                case 2:
+                    displayByActivity(e);
+                    break;
+                case 3:
+                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                    break;
+                case 4:
+                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                case 5:
+                    displayByDistance(e, Menu.selectOrder());
+                    break;
+                case 6:
+                    Collections.sort(e, new HeartRateComparator());
+                    displaySessions(e);
+                    break;
+                case 7:
+                    System.out.print("Enter a  minimum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    distance = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(e, distance));
+                    break;
+                case 8:
+                    System.out.println("Enter a minimum duration: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    duration = kb.nextInt();
+                    displaySessions(filterByMinimumDuration(e, duration));
+                    break;
+                case 9:
+                    displayByCaloriesBurned(e);
+                    break;
+                case 10:
+                    // TODO ENERGY EXPENDED
+                    break;
+                case 0:
+                    exit = true; // exit this menu
+                    break;
+                default:
+                    System.out.println("Select from one of the menu options 0 -> 3");
+                    break;
+            }
+
+        }while(!exit);
+    }
+
+    // ----------- Cycling -----------
+    public static void CyclingInterface(ArrayList<ActivityEntry> e) {
+        Scanner kb = new Scanner(System.in);
+        boolean exit = false;
+        int choice = 0;
+        int duration = 0;
+        double distance = 0.0;
+
+        String[] sessionsMenuItems = {
+                "Display all",
+                "By Activity",
+                "By Date",
+                "By Duration",
+                "By Distance",
+                "By Heart Rate",
+                "Above distance X",
+                "Above duration X",
+                "Calories Burned",
+                "Energy Expended Type"};
+
+        Menu sessionMenu = new Menu(sessionsMenuItems, "Cycling");
+        do{
+            sessionMenu.display();
+
+            choice = sessionMenu.getChoice();
+
+            switch (choice){
+                case 1:
+                    displaySessions(e);
+                    break;
+                case 2:
+                    displayByActivity(e);
+                    break;
+                case 3:
+                    Collections.sort(e, new DateComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                    break;
+                case 4:
+                    Collections.sort(e, new DurationComparator(Menu.selectOrder()));
+                    displaySessions(e);
+                case 5:
+                    displayByDistance(e, Menu.selectOrder());
+                    break;
+                case 6:
+                    Collections.sort(e, new HeartRateComparator());
+                    displaySessions(e);
+                    break;
+                case 7:
+                    System.out.print("Enter a  minimum distance: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    distance = kb.nextInt();
+                    displaySessions(filterByMinimumDistance(e, distance));
+                    break;
+                case 8:
+                    System.out.println("Enter a minimum duration: ");
+                    // if the next input is not a number or less than one - enter loop
+                    while(!kb.hasNextInt()) {
+                        System.out.println("Invalid input, enter a number > 0");
+                        kb.next(); // consume invalid input
+                    }
+                    duration = kb.nextInt();
+                    displaySessions(filterByMinimumDuration(e, duration));
+                    break;
+                case 9:
+                    displayByCaloriesBurned(e);
+                    break;
+                case 10:
+                    // TODO ENERGY EXPENDED
+                    break;
+                case 0:
+                    exit = true; // exit this menu
+                    break;
+                default:
+                    System.out.println("Select from one of the menu options 0 -> 3");
+                    break;
+            }
+
+        }while(!exit);
+    }
 
     // ----------- Add a new activity -----------
     public static void addActivityEntry(ArrayList<ActivityEntry> e) {
@@ -235,7 +578,8 @@ public class Main {
         return filtered;
     }
 
-    // uses lambda function
+
+    // ----------- Uses lambda function -----------
     public static void displayByDistance(ArrayList<ActivityEntry> records,boolean ascending) {
         if (ascending) {
             Collections.sort(records, (e1, e2) ->
@@ -260,7 +604,8 @@ public class Main {
         }
         displaySessions(records);
     }
-    // anonymous inner class
+
+    // ----------- Anonymous inner class -----------
     public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
@@ -276,25 +621,6 @@ public class Main {
         });
         displaySessions(records);
     }
-    public static boolean selectOrder(){
-        Scanner kb = new Scanner(System.in);
-        System.out.println("+ ------- Select Order ------- +");
-        System.out.println("|                              |");
-        System.out.println("|         1. Ascending         |");
-        System.out.println("|         2. Descending        |");
-        System.out.println("|                              |");
-        System.out.println("+ ---------------------------- +");
-
-        while (!kb.hasNextInt()) {
-            System.out.println("Select 1 for ASCENDING | 2 for DESCENDING");
-            kb.next(); // Consume invalid input
-        }
-        int choice = kb.nextInt();
-        if(choice == 1)
-            return  true; // Ascending
-        else
-            return false; // Descending
-    }
 
     // ----------- Displays as a table -----------
     public static void displaySessions(ArrayList<ActivityEntry> entries) {
@@ -307,167 +633,6 @@ public class Main {
         System.out.println("+==============================================================================================+");
     }
 
-
-    // ----------- Display menu -----------
-    public static void displayMenu() {
-        System.out.println("+ ------ Activity Tracker ----- +");
-        System.out.println("|                               |");
-        System.out.println("|    1. All Sessions            |");
-        System.out.println("|    2. Select Activity         |");
-        System.out.println("|    3. Individual Reports      |");
-        System.out.println("|    4. Add New Activity        |");
-        System.out.println("|                               |");
-        System.out.println("|    0. Exit                    |");
-        System.out.println("|                               |");
-        System.out.println("+ ----------------------------- +");
-    }
-
-
-    // ----------- Select activity -----------
-    public static void displaySelectActivity() {
-        System.out.println("+ ------ Select Activity ----- +");
-        System.out.println("|                               |");
-        System.out.println("|         1. Running            |");
-        System.out.println("|         2. Swimming           |");
-        System.out.println("|         3. Cycling            |");
-        System.out.println("|                               |");
-        System.out.println("+ ----------------------------- +");
-    }
-
-
-    // ----------- Sessions -----------
-    public static void SessionsInterface(ArrayList<ActivityEntry> e) {
-        Scanner kb = new Scanner(System.in);
-        boolean exit = false;
-        boolean page = false; // false = 1, true = 2
-        double duration = 0;
-        int distance = 0;
-        do{
-            System.out.println(displaySessionsMenu(page)); // Print menu onto screen
-
-            // check if input is not a number
-            while(!kb.hasNextInt()) {
-                System.out.println("Invalid input, enter a corresponding number listed from the menu (0-4).");
-                kb.next(); // Consume invalid input
-            }
-            int choice = kb.nextInt();
-
-            // if your on the first page, you can select these options
-            if(!page) {
-                switch (choice){
-                    case 1:
-                        displaySessions(e);
-                        break;
-                    case 2:
-                        displayByActivity(e);
-                        break;
-                    case 3:
-                        Collections.sort(e, new DateComparator(selectOrder()));
-                        displaySessions(e);
-                        break;
-                    case 4:
-                        Collections.sort(e, new DurationComparator(selectOrder()));
-                        displaySessions(e);
-                    case 5:
-                        displayByDistance(e,selectOrder());
-                        break;
-                    case 6:
-                        Collections.sort(e, new HeartRateComparator());
-                        displaySessions(e);
-                        break;
-                    case -1:
-                        page = true; // move to the second page
-                        break;
-                    case 0:
-                        exit = true; // exit this menu
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options -1 -> 5");
-                        break;
-                }
-
-            }
-            // if your on the first page, you can select these options
-            if(page) {
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter a  minimum distance: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        duration = kb.nextDouble();
-
-                        displaySessions(filterByMinimumDistance(e,
-                                duration));
-                        break;
-                    case 2:
-                        System.out.println("Enter a minimum duration: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        distance = kb.nextInt();
-                        displaySessions(filterByMinimumDuration(e,
-                                distance));
-                        break;
-                    case 3:
-                        displayByCaloriesBurned(e);
-                        break;
-                    case 4:
-                        // TODO ENERGY EXPENDED
-                        break;
-                    case 0:
-                        page = false; // return to previous page
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options 0 -> 3");
-                        break;
-                }
-            }
-        }while(!exit);
-
-    }
-    public static String displaySessionsMenu(boolean whichPage) {
-
-        StringBuilder selectedPage = new StringBuilder();
-
-        if (!whichPage) // page 1
-        {
-            selectedPage.append("+ -----  All Activities  ------ +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Display all             |\n");
-            selectedPage.append("|    2. By Activity             |\n");
-            selectedPage.append("|    3. By Date                 |\n");
-            selectedPage.append("|    4. By Duration             |\n");
-            selectedPage.append("|    5. By Distance             |\n");
-            selectedPage.append("|    6. By Heart Rate           |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|   -1. Next                    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 1 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        if (whichPage) // page 2
-        {
-            selectedPage.append("+ -----  All Activities  ------ +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Above distance X        |\n");
-            selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Calories Burned         |\n");
-            selectedPage.append("|    4. Energy Expended Type    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 2 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        return selectedPage.toString();
-    }
-
-
     public static void displayByActivity(ArrayList<ActivityEntry> records) {
         Collections.sort(records, new Comparator<ActivityEntry>() {
             @Override
@@ -477,418 +642,6 @@ public class Main {
         });
         displaySessions(records);
     }
-
-
-
-    // ----------- Running -----------
-    public static void RunningInterface(ArrayList<ActivityEntry> e) {
-        Scanner kb = new Scanner(System.in);
-        boolean exit = false;
-        boolean page = false; // false = 1, true = 2
-        double duration = 0;
-        int distance = 0;
-        do {
-            // Create a nw ArrayList of all entries that are of type 'Running'
-            ArrayList<ActivityEntry> runningSessions = filterActivities(e, "Running");
-
-            System.out.println(displayRunningMenu(page)); // Print menu onto screen
-
-            // check if input is not a number
-            while (!kb.hasNextInt()) {
-                System.out.println("Enter a number listed from the menu.");
-                kb.next(); // Consume invalid input
-            }
-            int choice = kb.nextInt();
-
-            // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
-                    case 1:
-                        displaySessions(runningSessions);
-                        break;
-                    case 2:
-                        Collections.sort(runningSessions, new DateComparator(selectOrder())); // call selectOrder method
-                        displaySessions(runningSessions);                                     // to get the ASCE/DESC order
-                        break;
-                    case 3:
-                        Collections.sort(runningSessions, new DurationComparator(selectOrder()));
-                        displaySessions(runningSessions);
-                        break;
-                    case 4:
-                        displayByDistance(runningSessions,selectOrder());
-                        break;
-                    case 5:
-                        Collections.sort(runningSessions, new HeartRateComparator());
-                        displaySessions(runningSessions);
-                        break;
-                    case -1:
-                        page = true; // move to the second page
-                        break;
-                    case 0:
-                        exit = true; // exit this menu;
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options -1 -> 5");
-                        break;
-                }
-            }
-
-            // if your on the first page, you can select these options
-            if(page) {
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter a  minimum distance: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        duration = kb.nextDouble();
-                        displaySessions(filterByMinimumDistance(runningSessions,
-                                duration));
-
-                        break;
-                    case 2:
-                        System.out.println("Enter a minimum duration: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        distance = kb.nextInt();
-                        displaySessions(filterByMinimumDuration(runningSessions,
-                                distance));
-
-                        break;
-                    case 3:
-                        displayByCaloriesBurned(runningSessions);
-                        break;
-                    case 4:
-                        // TODO ENERGY EXPENDED
-                        break;
-                    case 0:
-                        page = false; // return to previous page
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options 0 -> 3");
-                        break;
-                }
-            }
-        }while(!exit);
-    }
-    public static String displayRunningMenu(boolean whichPage) {
-
-        StringBuilder selectedPage = new StringBuilder();
-
-        if (!whichPage) // page 1
-        {
-            selectedPage.append("+ ---------  Running  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Display all             |\n");
-            selectedPage.append("|    2. By Date                 |\n");
-            selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Distance             |\n");
-            selectedPage.append("|    5. By Heart Rate           |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|   -1. Next                    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 1 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        if (whichPage) // page 2
-        {
-            selectedPage.append("+ ---------  Running  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Above distance X        |\n");
-            selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Calories Burned         |\n");
-            selectedPage.append("|    4. Energy Expended Type    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 2 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        return selectedPage.toString();
-    }
-
-
-    // ----------- Swimming -----------
-    public static void SwimmingInterface(ArrayList<ActivityEntry> e) {
-        Scanner kb = new Scanner(System.in);
-        boolean exit = false;
-        boolean page = false; // false = 1, true = 2
-        boolean order;
-        double duration = 0.0;
-        int distance = 0;
-        do {
-            // Create a new ArrayList of all entries that are of type 'Swimming'
-            ArrayList<ActivityEntry> swimmingSessions = filterActivities(e, "Swimming");
-
-            System.out.println(displaySwimmingMenu(page)); // Print menu onto screen
-
-            // check if input is not a number
-            while (!kb.hasNextInt()) {
-                System.out.println("Enter a number listed from the menu.");
-                kb.next(); // Consume invalid input
-            }
-            int choice = kb.nextInt();
-
-            // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
-                    case 1:
-                        displaySessions(swimmingSessions);
-                        break;
-                    case 2:
-                        Collections.sort(swimmingSessions, new DateComparator(selectOrder()));// call selectOrder method
-                        displaySessions(swimmingSessions);                                    // to get the ASCE/DESC order
-                        break;
-                    case 3:
-                        Collections.sort(swimmingSessions, new DurationComparator(selectOrder()));
-                        displaySessions(swimmingSessions);
-                        break;
-                    case 4:
-                        displayByDistance(swimmingSessions,selectOrder());
-                        break;
-                    case 5:
-                        Collections.sort(swimmingSessions, new HeartRateComparator());
-                        displaySessions(swimmingSessions);
-                        break;
-                    case -1:
-                        page = true; // move to the second page
-                        break;
-                    case 0:
-                        exit = true; // exit this menu;
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options -1 -> 5");
-                        break;
-                }
-            }
-
-            // if your on the first page, you can select these options
-            if(page) {
-                switch (choice) {
-                    case 1:
-                    System.out.print("Enter a  maximum distance: ");
-                    // if the next input is not a number or less than one - enter loop
-                    while(!kb.hasNextInt()) {
-                        System.out.println("Invalid input, enter a number > 0");
-                        kb.next(); // consume invalid input
-                    }
-                    duration = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(swimmingSessions,
-                            duration));
-
-                    break;
-                    case 2:
-                        System.out.println("Enter a minimum duration: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        distance = kb.nextInt();
-                        displaySessions(filterByMinimumDuration(swimmingSessions,
-                                distance));
-                        break;
-                    case 3:
-                        displayByCaloriesBurned(swimmingSessions);
-                        break;
-                    case 4:
-                        // TODO Method to show the energy expended for each activity in a subset
-                        break;
-                    case 0:
-                        page = false; // return to previous page
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options 0 -> 3");
-                        break;
-                }
-            }
-        }while(!exit);
-    }
-    public static String displaySwimmingMenu(boolean whichPage) {
-        StringBuilder selectedPage = new StringBuilder();
-
-        if (!whichPage) // page 1
-        {
-            selectedPage.append("+ ---------  Swimming  -------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Display all             |\n");
-            selectedPage.append("|    2. By Date                 |\n");
-            selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Distance             |\n");
-            selectedPage.append("|    5. By Heart Rate           |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|   -1. Next                    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 1 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        if (whichPage) // page 2
-        {
-            selectedPage.append("+ ---------  Swimming  -------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Above distance X        |\n");
-            selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Calories Burned         |\n");
-            selectedPage.append("|    4. Energy Expended Type    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 2 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        return selectedPage.toString();
-    }
-
-
-    // ----------- Cycling -----------
-    public static void CyclingInterface(ArrayList<ActivityEntry> e) {
-        Scanner kb = new Scanner(System.in);
-        boolean exit = false;
-        boolean page = false; // false = 1, true = 2
-        double duration = 0.0;
-        int distance = 0;
-        do {
-            // Create a new ArrayList of all entries that are of type 'Swimming'
-            ArrayList<ActivityEntry> cyclingSessions = filterActivities(e, "Cycling");
-
-            System.out.println(displayCyclingMenu(page)); // Print menu onto screen
-
-            // check if input is not a number
-            while (!kb.hasNextInt()) {
-                System.out.println("Enter a number listed from the menu.");
-                kb.next(); // Consume invalid input
-            }
-            int choice = kb.nextInt();
-
-            // Deal with important inputs first
-            //
-            if(choice == -1) // move to the second page
-                page = true;
-            if(!page && choice == 0) // only works when on page 1:2 | Exits Swimming menu
-                exit = true;
-            if(page && choice == 0) // if your on the second page accept the controls from the second page
-            {
-                page = false;
-                exit = false;
-            }
-
-            // if your on the first page, you can select these options
-            if(!page) {
-                switch(choice) {
-                    case 1:
-                        displaySessions(cyclingSessions);
-                        break;
-                    case 2:
-                        Collections.sort(cyclingSessions, new DateComparator(selectOrder())); // call selectOrder method
-                        displaySessions(cyclingSessions);                                     // to get the ASCE/DESC value
-                        break;
-                    case 3:
-                        Collections.sort(cyclingSessions, new DurationComparator(selectOrder()));
-                        displaySessions(cyclingSessions);
-                        break;
-                    case 4:
-                        displayByDistance(cyclingSessions,selectOrder());
-                        break;
-                    case 5:
-                        Collections.sort(cyclingSessions, new HeartRateComparator());
-                        displaySessions(cyclingSessions);
-                        break;
-                    case -1:
-                        page = true; // move to the second page
-                        break;
-                    case 0:
-                        exit = true; // exit this menu;
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options -1 -> 5");
-                        break;
-                }
-            }
-
-            // if your on the first page, you can select these options
-            if(page) {
-                switch (choice) {
-                    case 1:
-                    System.out.print("Enter a  maximum distance: ");
-                    // if the next input is not a number or less than one - enter loop
-                    while(!kb.hasNextInt()) {
-                        System.out.println("Invalid input, enter a number > 0");
-                        kb.next(); // consume invalid input
-                    }
-                    duration = kb.nextInt();
-                    displaySessions(filterByMinimumDistance(cyclingSessions,
-                            duration));
-
-                    break;
-                    case 2:
-                        System.out.println("Enter a minimum duration: ");
-                        // if the next input is not a number or less than one - enter loop
-                        while(!kb.hasNextInt()) {
-                            System.out.println("Invalid input, enter a number > 0");
-                            kb.next(); // consume invalid input
-                        }
-                        distance = kb.nextInt();
-                        displaySessions(filterByMinimumDuration(cyclingSessions,
-                                distance));
-                        break;
-                    case 3:
-                        displayByCaloriesBurned(cyclingSessions);
-                        break;
-                    case 4:
-                       // TODO Method to show the energy expended for each activity in a subset
-                        break;
-                    case 0:
-                        page = false; // return to previous page
-                        break;
-                    default:
-                        System.out.println("Select from one of the menu options 0 -> 4");
-                        break;
-                }
-            }
-        } while (!exit);
-    }
-    public static String displayCyclingMenu(boolean whichPage) {
-        StringBuilder selectedPage = new StringBuilder();
-
-        if (!whichPage) // page 1
-        {
-            selectedPage.append("+ ---------  Cycling  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Display all             |\n");
-            selectedPage.append("|    2. By Date                 |\n");
-            selectedPage.append("|    3. By Duration             |\n");
-            selectedPage.append("|    4. By Distance             |\n");
-            selectedPage.append("|    5. By Heart Rate           |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|   -1. Next                    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 1 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        if (whichPage) // page 2
-        {
-            selectedPage.append("+ ---------  Cycling  --------- +\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|    1. Above distance X        |\n");
-            selectedPage.append("|    2. Above duration X        |\n");
-            selectedPage.append("|    3. Calories Burned         |\n");
-            selectedPage.append("|    4. Energy Expended Type    |\n");
-            selectedPage.append("|    0. Return                  |\n");
-            selectedPage.append("|                               |\n");
-            selectedPage.append("|          page 2 : 2           |\n");
-            selectedPage.append("+ ----------------------------- +");
-        }
-        return selectedPage.toString();
-    }
-
-
-
 
 
     public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
