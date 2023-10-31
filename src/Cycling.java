@@ -7,6 +7,10 @@ public class Cycling extends ActivityEntry{
         super();
     }
 
+    public Cycling(String date) {
+        super(date);
+    }
+
 
     public ActivityEntry.INTENSITY getIntensityValue() {
         double kmph = this.getDistance()/((double) this.getDuration() /60);

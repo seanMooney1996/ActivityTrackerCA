@@ -8,6 +8,9 @@ public class Running extends ActivityEntry {
     public Running() {
         super();
     }
+    public Running(String date) {
+        super(date);
+    }
 
     public ActivityEntry.INTENSITY getIntensityValue() {
         double kmph = this.getDistance()/((double) this.getDuration() /60);
