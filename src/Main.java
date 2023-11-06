@@ -22,8 +22,8 @@ public class Main {
         String[] mainMenuOptions = {
                 "All Sessions",
                 "Select Activity",
-                "Individual Reports",
                 "Add New Activity",
+                "Binary Search"
         };
 
         // instantiate a new Menu object
@@ -54,10 +54,10 @@ public class Main {
                     }
                     break;
                 case 3:
-                    // TODO Individual Reports
+                    addActivityEntry(records);
                     break;
                 case 4:
-                    addActivityEntry(records);
+                    searchBinary(records, getUserParameters());
                     break;
                 case 0:
                     exit = true; // exit program
@@ -153,7 +153,8 @@ public class Main {
                 "Calories Burned",
                 "Energy Expended Type",
                 "Average Distances",
-                "Average Calories"};
+                "Average Calories"
+        };
 
         Menu sessionMenu = new Menu(sessionsMenuItems, "All Activities");
         do{
@@ -667,9 +668,9 @@ public class Main {
         do {
             inputValid = true;
             Scanner input = new Scanner(System.in);
-            System.out.println("Enter Activity Type:");
+            System.out.print("Enter Activity Type: ");
             String type = input.next();
-            System.out.println("Enter Date: dd/mm/yy");
+            System.out.print("\nEnter Date(dd/mm/yyyy): ");
             String date = input.next();
 
             if (type.equalsIgnoreCase("Running")) {
