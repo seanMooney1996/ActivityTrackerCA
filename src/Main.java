@@ -57,7 +57,7 @@ public class Main {
                     addActivityEntry(records);
                     break;
                 case 4:
-                    searchBinary(records, getUserParameters());
+                    System.out.println(searchBinary(records, getUserParameters()));
                     break;
                 case 0:
                     exit = true; // exit program
@@ -656,7 +656,7 @@ public class Main {
         Collections.sort(list);
         int index = binarySearch(list, toFind);
         if (index != -1)
-            return "Found "+list.get(index).toString()+" at index"+index+".";
+            return "Found "+list.get(index).toString()+" at index "+index+".";
         else
             return "No activity was found with these parameters.";
     }
