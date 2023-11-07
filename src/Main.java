@@ -114,16 +114,16 @@ public class Main {
     }
 
     // Iterates through the records array to check for duplicates using Overrode version of .equals
-    public static void removeDuplicates(ArrayList<ActivityEntry> records) {
+    public static void removeDuplicates(ArrayList<ActivityEntry> e) {
         System.out.println("removing duplicates");
-        int size = records.size();
+        int size = e.size();
         for (int i = 0; i < size; i++) {
-            ActivityEntry entry1 = records.get(i);
+            ActivityEntry entry1 = e.get(i);
             for (int j = i + 1; j < size; j++) {
-                ActivityEntry entry2 = records.get(j);
+                ActivityEntry entry2 = e.get(j);
                 if (entry1.equals(entry2)) {
                     System.out.println("removing 1");
-                    records.remove(j);
+                    e.remove(j);
                     size--;
                     j--;
                 }
@@ -548,6 +548,16 @@ public class Main {
         }
         return filterByActivities;
     }
+    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
+        ArrayList<ActivityEntry> filtered = new ArrayList<>();
+        for (ActivityEntry entries : e) {
+            if (entries.getIntensityValue().name().equals(intensityString)) {
+                System.out.println("11"+entries.getIntensityValue());
+                filtered.add(entries);
+            }
+        }
+        return filtered;
+    }
     public static ArrayList<ActivityEntry> filterByMinimumDistance(ArrayList<ActivityEntry> e, double minDistance) {
         ArrayList<ActivityEntry> filteredDistances = new ArrayList<>();
         for (ActivityEntry entries : e) {
@@ -566,32 +576,31 @@ public class Main {
         }
         return filtered;
     }
-    public static ArrayList<ActivityEntry> filterByEnergyExpended(ArrayList<ActivityEntry> e, String intensityString) {
-        ArrayList<ActivityEntry> filtered = new ArrayList<>();
-        for (ActivityEntry entries : e) {
-            if (entries.getIntensityValue().name().equals(intensityString)) {
-                System.out.println("11"+entries.getIntensityValue());
-                filtered.add(entries);
-            }
-        }
-        return filtered;
-    }
+
 
     // ----------- Displays as a table -----------
-    public static void displaySessions(ArrayList<ActivityEntry> entries) {
+    public static void displaySessions(ArrayList<ActivityEntry> e) {
         System.out.println("+================================\t\t Sessions\t\t=======================================+");
         System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Calories Burned\t   |");
 
-        for (ActivityEntry e : entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getCaloriesBurned());
+        for (ActivityEntry entries : e) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14.2f|\n", entries.getActivityType(), entries.getDate(), entries.getDuration(), entries.getDistance(), entries.getHeartRate(), entries.getCaloriesBurned());
         }
         System.out.println("+==============================================================================================+");
     }
+    public static void displayEnergyExpended(ArrayList<ActivityEntry> e) {
+        System.out.println("+================================\t\t Sessions\t\t=======================================+");
+        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Intensity Value\t   |");
 
+        for (ActivityEntry entries : e) {
+            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14s|\n", entries.getActivityType(), entries.getDate(), entries.getDuration(), entries.getDistance(), entries.getHeartRate(), entries.getIntensityValue().name());
+        }
+        System.out.println("+==============================================================================================+");
+    }
     // ----------- Uses lambda function -----------
-    public static void displayByDistance(ArrayList<ActivityEntry> records, boolean ascending) {
+    public static void displayByDistance(ArrayList<ActivityEntry> e, boolean ascending) {
         if (ascending) {
-            Collections.sort(records, (e1, e2) ->
+            Collections.sort(e, (e1, e2) ->
             {
                 if (e2.getDistance() > e1.getDistance())
                     return -1;
@@ -601,7 +610,7 @@ public class Main {
                     return 0;
             });
         } else {
-            Collections.sort(records, (e1, e2) ->
+            Collections.sort(e, (e1, e2) ->
             {
                 if (e2.getDistance() > e1.getDistance())
                     return 1;
@@ -611,12 +620,12 @@ public class Main {
                     return 0;
             });
         }
-        displaySessions(records);
+        displaySessions(e);
     }
 
     // ----------- Anonymous inner class -----------
-    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> records) {
-        Collections.sort(records, new Comparator<ActivityEntry>() {
+    public static void displayByCaloriesBurned(ArrayList<ActivityEntry> e) {
+        Collections.sort(e, new Comparator<ActivityEntry>() {
             @Override
             public int compare(ActivityEntry e1, ActivityEntry e2) {
                 if (e1.getCaloriesBurned() > e2.getCaloriesBurned())
@@ -628,26 +637,16 @@ public class Main {
 
             }
         });
-        displaySessions(records);
+        displaySessions(e);
     }
-    public static void displayByActivity(ArrayList<ActivityEntry> records) {
-        Collections.sort(records, new Comparator<ActivityEntry>() {
+    public static void displayByActivity(ArrayList<ActivityEntry> e) {
+        Collections.sort(e, new Comparator<ActivityEntry>() {
             @Override
             public int compare(ActivityEntry e1, ActivityEntry e2) {
                 return e1.getActivityType().compareTo(e2.getActivityType());
             }
         });
-        displaySessions(records);
-    }
-
-    public static void displayEnergyExpended(ArrayList<ActivityEntry> entries) {
-        System.out.println("+================================\t\t Sessions\t\t=======================================+");
-        System.out.printf("|\t%-15s %-12s %-10s %-10s %-20s %-15s\n", "Activity Type", "Date", "Duration", "Distance", "Avg Heart Rate", "Intensity Value\t   |");
-
-        for (ActivityEntry e : entries) {
-            System.out.printf("|\t%-15s %-12s %-10s %-10s %-25s %-14s|\n", e.getActivityType(), e.getDate(), e.getDuration(), e.getDistance(), e.getHeartRate(), e.getIntensityValue().name());
-        }
-        System.out.println("+==============================================================================================+");
+        displaySessions(e);
     }
 
 
@@ -655,7 +654,7 @@ public class Main {
     public static String searchBinary(ArrayList<ActivityEntry> list, ActivityEntry toFind) {
         Collections.sort(list);
         int index = binarySearch(list, toFind);
-        if (index != -1)
+        if (index  >= 0)
             return "Found "+list.get(index).toString()+" at index "+index+".";
         else
             return "No activity was found with these parameters.";
@@ -687,7 +686,7 @@ public class Main {
         return e;
     }
 
-    public static double[] getAverageDistances(ArrayList<ActivityEntry> records) {
+    public static double[] getAverageDistances(ArrayList<ActivityEntry> e) {
         double runningAvg, cyclingAvg, swimmingAvg;
         double runningTotal = 0;
         double cyclingTotal = 0;
@@ -695,16 +694,16 @@ public class Main {
         int runningCount = 0;
         int cyclingCount = 0;
         int swimmingCount = 0;
-        for (ActivityEntry e : records) {
-            if (e.getActivityType().equals("Running")) {
+        for (ActivityEntry entries : e) {
+            if (entries.getActivityType().equals("Running")) {
                 runningCount++;
-                runningTotal += e.getDistance();
-            } else if (e.getActivityType().equals("Swimming")) {
+                runningTotal += entries.getDistance();
+            } else if (entries.getActivityType().equals("Swimming")) {
                 swimmingCount++;
-                swimmingTotal += e.getDistance();
+                swimmingTotal += entries.getDistance();
             } else {
                 cyclingCount++;
-                cyclingTotal += e.getDistance();
+                cyclingTotal += entries.getDistance();
             }
         }
         runningAvg = runningTotal / runningCount;
@@ -713,7 +712,7 @@ public class Main {
         double[] avgs = {runningAvg, swimmingAvg, cyclingAvg};
         return avgs;
     }
-    public static double[] getAverageCalories(ArrayList<ActivityEntry> records) {
+    public static double[] getAverageCalories(ArrayList<ActivityEntry> e) {
         double runningAvg, cyclingAvg, swimmingAvg;
         double runningTotal = 0;
         double cyclingTotal = 0;
@@ -721,16 +720,16 @@ public class Main {
         int runningCount = 0;
         int cyclingCount = 0;
         int swimmingCount = 0;
-        for (ActivityEntry e : records) {
-            if (e.getActivityType().equals("Running")) {
+        for (ActivityEntry entries : e) {
+            if (entries.getActivityType().equals("Running")) {
                 runningCount++;
-                runningTotal += e.getCaloriesBurned();
-            } else if (e.getActivityType().equals("Swimming")) {
+                runningTotal += entries.getCaloriesBurned();
+            } else if (entries.getActivityType().equals("Swimming")) {
                 swimmingCount++;
-                swimmingTotal += e.getCaloriesBurned();
+                swimmingTotal += entries.getCaloriesBurned();
             } else {
                 cyclingCount++;
-                cyclingTotal += e.getCaloriesBurned();
+                cyclingTotal += entries.getCaloriesBurned();
             }
         }
         runningAvg = runningTotal / runningCount;

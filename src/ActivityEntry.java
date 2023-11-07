@@ -7,8 +7,6 @@ public abstract class ActivityEntry implements Comparable<ActivityEntry> {
     private int duration;
 
 
-
-
     public ActivityEntry( String date, double distance, int heartRate, int duration) {
         this.date = date;
         this.distance = distance;
