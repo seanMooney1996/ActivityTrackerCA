@@ -579,7 +579,6 @@ public class Main {
         ArrayList<ActivityEntry> filtered = new ArrayList<>();
         for (ActivityEntry entries : e) {
             if (entries.getIntensityValue().name().equals(intensityString)) {
-                System.out.println("11"+entries.getIntensityValue());
                 filtered.add(entries);
             }
         }
